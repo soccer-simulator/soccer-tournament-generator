@@ -3,14 +3,10 @@ import { useEffect, useState } from 'react';
 
 import { AppStore } from './AppStore.ts';
 
-import './App.css';
-
 export const App = observer(() => {
   const [appStore] = useState(() => new AppStore());
 
   const { initialized } = appStore;
-
-  console.log(initialized);
 
   useEffect(() => {
     (async () => {
@@ -22,5 +18,12 @@ export const App = observer(() => {
     return null;
   }
 
-  return <h1>Soccer Tournament Generator</h1>;
+  return (
+    <section className="hero is-link">
+      <div className="hero-body">
+        <p className="title">Soccer Tournament Generator</p>
+        <p className="subtitle">generate your own tournament tables</p>
+      </div>
+    </section>
+  );
 });
