@@ -37,10 +37,7 @@ export default tseslint.config(
         {
           groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
           'newlines-between': 'always',
-          alphabetize: {
-            caseInsensitive: true,
-            order: 'asc'
-          }
+          alphabetize: { caseInsensitive: true, order: 'asc' }
         }
       ],
       '@stylistic/js/array-bracket-newline': ['error', 'consistent'],
@@ -101,11 +98,7 @@ export default tseslint.config(
       '@stylistic/ts/space-before-blocks': 'error',
       '@stylistic/ts/space-before-function-paren': [
         'error',
-        {
-          anonymous: 'always',
-          named: 'never',
-          asyncArrow: 'always'
-        }
+        { anonymous: 'always', named: 'never', asyncArrow: 'always' }
       ],
       '@stylistic/ts/space-infix-ops': ['error', { int32Hint: true }],
       '@typescript-eslint/ban-ts-comment': 'off',
