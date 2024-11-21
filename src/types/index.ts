@@ -1,4 +1,6 @@
-export type Primitive = number | string;
+export type Primitive = number | string | boolean;
+
+export type ConfigArray<T> = Array<T> | ReadonlyArray<T>;
 
 export type IdentifiedEntity<T extends Primitive = number> = {
   id: T;
@@ -7,5 +9,3 @@ export type IdentifiedEntity<T extends Primitive = number> = {
 export type NamedEntity<T extends Primitive = number> = IdentifiedEntity<T> & {
   name: string;
 };
-
-export type Team = NamedEntity;
