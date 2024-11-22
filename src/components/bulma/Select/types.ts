@@ -6,7 +6,7 @@ import { ComponentSize, ComponentType } from '../types.ts';
 export type SelectType = ComponentType;
 export type SelectSize = ComponentSize;
 
-export type SelectOption<T extends Primitive> = {
+export type SelectOption<T extends Primitive = number> = {
   value: T;
   label: ReactNode;
 };

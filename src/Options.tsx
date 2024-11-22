@@ -1,4 +1,5 @@
 import { observer } from 'mobx-react-lite';
+import { useMemo } from 'react';
 
 import { AppStoreContext } from './AppStore.ts';
 import { Button } from './components/bulma/Button/Button.tsx';
@@ -8,7 +9,7 @@ import { SelectOption } from './components/bulma/Select/types.ts';
 import { tournamentTypes } from './constants/soccer.ts';
 import { TournamentType } from './types/soccer.ts';
 import { useContext } from './utils/context.ts';
-import { getTournamentTypeLabel } from './utils/soccer.ts';
+import { getTournamentTypeAvailableTeamsCount, getTournamentTypeLabel } from './utils/soccer.ts';
 import { defined } from './utils/type-guard.ts';
 
 const tournamentTypeOptions: ReadonlyArray<SelectOption<TournamentType>> = tournamentTypes.map(
@@ -20,7 +21,15 @@ const tournamentTypeOptions: ReadonlyArray<SelectOption<TournamentType>> = tourn
 export const Options = observer(() => {
   const appStore = useContext(AppStoreContext);
 
-  const { tournamentType } = appStore;
+  const { tournamentType, teamsCount } = appStore;
+
+  const availableTeamsCount = useMemo(() => getTournamentTypeAvailableTeamsCount(tournamentType), [tournamentType]);
+  const teamsCountOptions = availableTeamsCount.map(
+    (teamsCount): SelectOption => {
+      return { value: teamsCount, label: teamsCount };
+    },
+    [availableTeamsCount]
+  );
 
   return (
     <>
@@ -31,6 +40,17 @@ export const Options = observer(() => {
           onChange={(tournamentType) => {
             if (defined(tournamentType)) {
               appStore.setTournamentType(tournamentType);
+            }
+          }}
+        />
+      </Field>
+      <Field label="Количество команд">
+        <Select
+          options={teamsCountOptions}
+          value={teamsCount}
+          onChange={(teamsCount) => {
+            if (defined(teamsCount)) {
+              appStore.setTeamsCount(teamsCount);
             }
           }}
         />
