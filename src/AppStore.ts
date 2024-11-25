@@ -6,6 +6,7 @@ import { Team, TournamentType } from './types/soccer.ts';
 import { createContext } from './utils/context.ts';
 import { disposePersistableStore, makeStorePersistable } from './utils/persist/persist.ts';
 import { LocalPersistableStorage } from './utils/persist/storage.ts';
+import { createPersistableLiteralPropertySerializationOptions } from './utils/persist/utils.ts';
 import { getTournamentTypeAvailableTeamsCount } from './utils/soccer.ts';
 
 const defaultTournamentType: TournamentType = 'group';
@@ -30,15 +31,9 @@ export class AppStore implements StoreInterface {
       key: 'App',
       storage: new LocalPersistableStorage(),
       properties: [
-        // TODO: consider creating serializer/deserializer based on ZOD schema
         {
           name: 'tournamentType',
-          serialize: (value) => ({ value }),
-          deserialize: (serialized): TournamentType => {
-            return 'value' in serialized && tournamentTypes.includes(serialized.value as TournamentType)
-              ? (serialized.value as TournamentType)
-              : 'league';
-          }
+          ...createPersistableLiteralPropertySerializationOptions<AppStore, 'tournamentType'>(tournamentTypes)
         },
         'teamsCount'
       ]

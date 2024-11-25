@@ -1,9 +1,15 @@
 import z from 'zod';
 
+import { tournamentTypes } from '../../constants/soccer.ts';
+import { ConfigArray, Primitive } from '../../types';
+import { TournamentType } from '../../types/soccer.ts';
+import { createZodLiteralUnionSchema } from '../zod.ts';
+
 import {
   PersistableProperty,
   PersistablePropertyDeserializer,
   PersistablePropertyName,
+  PersistablePropertySerializationOptions,
   PersistablePropertySerializer,
   PersistableSerializedValue,
   PersistableStore,
@@ -26,6 +32,29 @@ export function defaultPersistableSerializer<T>(value: T): PersistableSerialized
 export function defaultPersistableDeserializer<T>(serializedValue: PersistableSerializedValue): T {
   const result = primitiveSchema.safeParse(serializedValue);
   return result.success ? (result.data.value as T) : (serializedValue as T);
+}
+
+export function createPersistableLiteralPropertySerializationOptions<
+  S extends PersistableStore,
+  N extends PersistablePropertyName<S> = PersistablePropertyName<S>
+>(values: S[N] extends Primitive ? ConfigArray<S[N]> : never): PersistablePropertySerializationOptions<S, N> {
+  return {
+    serialize: (value) => {
+      const schema = createZodLiteralUnionSchema(values);
+      if (!schema.safeParse(value).success) {
+        throw new TypeError('Unable to serialize literal');
+      }
+      return { __type: 'literal', value };
+    },
+    deserialize: (serialized): S[N] => {
+      const schema = z.object({ __type: z.literal('literal'), value: createZodLiteralUnionSchema(values) });
+      const result = schema.safeParse(serialized);
+      if (!result.success) {
+        throw new TypeError('Unable to deserialize literal');
+      }
+      return result.data.value as S[N];
+    }
+  };
 }
 
 export function normalizePersistableProperty<
