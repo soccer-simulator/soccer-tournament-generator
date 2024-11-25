@@ -33,7 +33,7 @@ export function deserializeSelectValue<T extends Primitive>(serialized: string):
       if (prefix === 'boolean') {
         return Boolean(value) as T;
       }
-    } catch (e) {
+    } catch (_) {
       // Do nothing here, error will be thrown below
     }
   }

@@ -1,9 +1,11 @@
 import { action, computed, observable, runInAction } from 'mobx';
-import { makePersistable, stopPersisting } from 'mobx-persist-store';
 
+import { tournamentTypes } from './constants/soccer.ts';
 import { StoreInterface } from './interfaces.ts';
 import { Team, TournamentType } from './types/soccer.ts';
 import { createContext } from './utils/context.ts';
+import { disposePersistableStore, makeStorePersistable } from './utils/persist/persist.ts';
+import { LocalPersistableStorage } from './utils/persist/storage.ts';
 import { getTournamentTypeAvailableTeamsCount } from './utils/soccer.ts';
 
 const defaultTournamentType: TournamentType = 'group';
@@ -24,12 +26,23 @@ export class AppStore implements StoreInterface {
   }
 
   async init(): Promise<void> {
-    await makePersistable(this, {
-      name: 'App',
-      debugMode: true,
-      version: 1,
-      storage: window.localStorage,
-      properties: ['tournamentType', 'teamsCount']
+    await makeStorePersistable<AppStore>(this, {
+      key: 'App',
+      storage: new LocalPersistableStorage(),
+      properties: [
+        {
+          name: 'tournamentType',
+          serialize: (value) => `${value}`,
+          deserialize: (value) => {
+            const typedValue = value as TournamentType;
+            if (!tournamentTypes.includes(typedValue)) {
+              throw new TypeError('Unable to deserialize tournament type');
+            }
+            return typedValue;
+          }
+        },
+        'teamsCount'
+      ]
     });
     runInAction(() => {
       this.initialized = true;
@@ -37,7 +50,7 @@ export class AppStore implements StoreInterface {
   }
 
   async dispose(): Promise<void> {
-    stopPersisting(this);
+    disposePersistableStore(this);
   }
 
   @action setTournamentType(tournamentType: TournamentType): void {

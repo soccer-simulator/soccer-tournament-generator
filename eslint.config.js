@@ -68,7 +68,7 @@ export default tseslint.config(
       '@stylistic/js/no-tabs': 'error',
       '@stylistic/js/no-trailing-spaces': 'error',
       '@stylistic/js/no-whitespace-before-property': 'error',
-      '@stylistic/js/operator-linebreak': ['error', 'after'],
+      '@stylistic/js/operator-linebreak': ['error', 'after', { overrides: { '?': 'before', ':': 'before' } }],
       '@stylistic/js/quote-props': ['error', 'as-needed'],
       '@stylistic/js/rest-spread-spacing': ['error', 'never'],
       '@stylistic/js/semi-spacing': ['error', { before: false, after: true }],
@@ -80,7 +80,7 @@ export default tseslint.config(
       '@stylistic/ts/comma-dangle': ['error', 'never'],
       '@stylistic/ts/comma-spacing': ['error', { before: false, after: true }],
       '@stylistic/ts/function-call-spacing': ['error', 'never'],
-      '@stylistic/ts/indent': ['error', 2],
+      '@stylistic/ts/indent': ['error', 2, { flatTernaryExpressions: false, offsetTernaryExpressions: true }],
       '@stylistic/ts/key-spacing': ['error', { mode: 'strict', beforeColon: false, afterColon: true }],
       '@stylistic/ts/keyword-spacing': ['error', { before: true, after: true }],
       '@stylistic/ts/lines-between-class-members': [
@@ -103,7 +103,18 @@ export default tseslint.config(
       '@stylistic/ts/space-infix-ops': ['error', { int32Hint: true }],
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/interface-name-prefix': 'off',
-      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true
+        }
+      ],
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       'react-hooks/exhaustive-deps': 'off'
