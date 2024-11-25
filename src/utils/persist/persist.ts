@@ -33,17 +33,16 @@ export async function makeStorePersistable<
         try {
           const deserializedValue =
             serializedValue !== undefined && serializedValue !== null
-              ? deserializePersistablePropertyValue(deserialize, serialized[name])
+              ? deserializePersistablePropertyValue(serialized[name], deserialize)
               : undefined;
           if (deserializedValue !== undefined) {
-            persistableValue[name] = deserializedValue;
+            persistableValue[name] = serializedValue;
             store[name] = deserializedValue;
           }
         } catch (_) {
           // Unable to deserialize property
         }
       });
-      console.log(persistableValue);
       await storage.save(key, JSON.stringify(persistableValue));
     } catch (_) {
       // Unable to parse stored properties
@@ -55,7 +54,7 @@ export async function makeStorePersistable<
     return reaction(
       () => store[name],
       async (value) => {
-        const serializedValue = serializePersistablePropertyValue(serialize, value);
+        const serializedValue = serializePersistablePropertyValue(value, serialize);
         persistableValue = evaluatePersistableValue(persistableValue, { [name]: serializedValue });
         await storage.save(key, JSON.stringify(persistableValue));
       }

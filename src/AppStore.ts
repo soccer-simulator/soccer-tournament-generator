@@ -30,15 +30,14 @@ export class AppStore implements StoreInterface {
       key: 'App',
       storage: new LocalPersistableStorage(),
       properties: [
+        // TODO: consider creating serializer/deserializer based on ZOD schema
         {
           name: 'tournamentType',
-          serialize: (value) => `${value}`,
-          deserialize: (value) => {
-            const typedValue = value as TournamentType;
-            if (!tournamentTypes.includes(typedValue)) {
-              throw new TypeError('Unable to deserialize tournament type');
-            }
-            return typedValue;
+          serialize: (value) => ({ value }),
+          deserialize: (serialized): TournamentType => {
+            return 'value' in serialized && tournamentTypes.includes(serialized.value as TournamentType)
+              ? (serialized.value as TournamentType)
+              : 'league';
           }
         },
         'teamsCount'

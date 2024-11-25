@@ -1,47 +1,55 @@
+import z from 'zod';
+
 import {
   PersistableProperty,
   PersistablePropertyDeserializer,
   PersistablePropertyName,
   PersistablePropertySerializer,
+  PersistableSerializedValue,
   PersistableStore,
   PersistableValue
 } from './types.ts';
 
-export function defaultPersistableSerializer<T>(value: T): string {
-  return JSON.stringify(value);
+const stringSchema = z.object({ __type: z.literal('string'), value: z.string() });
+const numberSchema = z.object({ __type: z.literal('number'), value: z.number() });
+const booleanSchema = z.object({ __type: z.literal('boolean'), value: z.boolean() });
+const primitiveSchema = z.union([stringSchema, numberSchema, booleanSchema]);
+
+export function defaultPersistableSerializer<T>(value: T): PersistableSerializedValue {
+  const serializableValue = { __type: typeof value, value };
+  if (primitiveSchema.safeParse(serializableValue).success) {
+    return serializableValue;
+  }
+  return value as PersistableSerializedValue;
 }
 
-export function defaultPersistableDeserializer<T>(serializeValue: string): T {
-  return JSON.parse(serializeValue);
+export function defaultPersistableDeserializer<T>(serializedValue: PersistableSerializedValue): T {
+  const result = primitiveSchema.safeParse(serializedValue);
+  return result.success ? (result.data.value as T) : (serializedValue as T);
 }
 
 export function normalizePersistableProperty<
   S extends PersistableStore,
   N extends PersistablePropertyName<S> = PersistablePropertyName<S>
 >(property: N | PersistableProperty<S, N>): PersistableProperty<S, N> {
-  return typeof property === 'object'
-    ? property
-    : {
-        name: property,
-        serialize: defaultPersistableSerializer<S[N]>,
-        deserialize: defaultPersistableDeserializer<S[N]>
-      };
+  return typeof property === 'object' ? property : { name: property };
 }
 
 export function serializePersistablePropertyValue<
   S extends PersistableStore,
   N extends PersistablePropertyName<S> = PersistablePropertyName<S>
->(serialize: PersistablePropertySerializer<S, N>, value: S[N]): string | number | boolean {
-  return typeof value === 'number' || typeof value === 'boolean' ? value : serialize(value);
+>(value: S[N], serialize?: PersistablePropertySerializer<S, N>): PersistableSerializedValue {
+  return serialize ? serialize(value) : defaultPersistableSerializer(value);
 }
 
 export function deserializePersistablePropertyValue<
   S extends PersistableStore,
   N extends PersistablePropertyName<S> = PersistablePropertyName<S>
->(deserialize: PersistablePropertyDeserializer<S, N>, serializedValue: string | number | boolean): S[N] {
-  return typeof serializedValue === 'number' || typeof serializedValue === 'boolean'
-    ? (serializedValue as S[N])
-    : deserialize(serializedValue);
+>(serializedValue: PersistableSerializedValue, deserialize?: PersistablePropertyDeserializer<S, N>): S[N] {
+  if (deserialize !== undefined) {
+    return deserialize(serializedValue);
+  }
+  return defaultPersistableDeserializer(serializedValue);
 }
 
 export function evaluatePersistableValue(previous: PersistableValue, update: Partial<PersistableValue>) {
