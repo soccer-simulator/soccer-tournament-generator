@@ -92,7 +92,7 @@ export function renderGroupTournament(tournament: GroupTournament, pdf: Pdf): vo
   const { groups } = tournament;
   groups.forEach((group) => {
     const pageWidth = getPageRenderWidth(pdf);
-    const stagingWidth = 150;
+    const stagingWidth = 120;
     const shiftY = renderGroupTable(group, pdf, {
       width: pageWidth - tableGap - stagingWidth,
       shiftY: pagePaddingVertical

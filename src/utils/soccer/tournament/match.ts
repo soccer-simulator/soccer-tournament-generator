@@ -13,6 +13,8 @@ import {
   resolveRenderWidth
 } from './render.ts';
 
+const scoreCellWidth = 25;
+
 export function renderMatchTable(match: Match, pdf: Pdf, options?: RenderOptions): void {
   const { team1, team2, score1, score2 } = match;
   autoTable(pdf, {
@@ -20,20 +22,29 @@ export function renderMatchTable(match: Match, pdf: Pdf, options?: RenderOptions
     ...applyTableRenderOptions(pdf, options),
     styles: defaultTableStyles,
     body: [
-      [team1.name, score1 || ''],
-      [team2.name, score2 || '']
+      [
+        { title: 'team', content: team1.name },
+        { title: 'score', content: score1 || '', styles: { cellWidth: scoreCellWidth } }
+      ],
+      [
+        { title: 'team', content: team2.name },
+        { title: 'score', content: score2 || '', styles: { cellWidth: scoreCellWidth } }
+      ]
     ]
   });
 }
 
-export function renderMatchDay(matchDay: MatchDay, pdf: Pdf, options?: RenderOptions): number {
+type MatchDayRenderOptions = RenderOptions & {
+  matchesPerRow?: number;
+};
+
+export function renderMatchDay(matchDay: MatchDay, pdf: Pdf, options?: MatchDayRenderOptions): number {
   const width = resolveRenderWidth(options);
   const shiftX = resolveRenderShiftX(options);
   const shiftY = resolveRenderShiftY(options);
+  const { matchesPerRow = 2 } = options || {};
 
   const renderWidth = typeof width === 'number' ? width : getPageRenderWidth(pdf);
-
-  const matchesPerRow = 2;
 
   const { number, matches } = matchDay;
   pdf.setFont('Ubuntu', 'bold');
@@ -51,5 +62,5 @@ export function renderMatchDay(matchDay: MatchDay, pdf: Pdf, options?: RenderOpt
     });
   }
 
-  return shiftY + headerSize2 + tableGap + (matches.length / matchesPerRow) * getTableHeight(2, true);
+  return shiftY + headerSize2 + tableGap + Math.ceil(matches.length / matchesPerRow) * getTableHeight(2, true);
 }
