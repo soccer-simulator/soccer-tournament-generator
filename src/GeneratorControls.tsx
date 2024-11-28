@@ -9,7 +9,8 @@ import { SelectOption } from './components/bulma/Select/types.ts';
 import { tournamentTypes } from './constants/soccer.ts';
 import { TournamentType } from './types/soccer.ts';
 import { useContext } from './utils/context.ts';
-import { generateTournament, getTournamentTypeAvailableTeamsCount, getTournamentTypeLabel } from './utils/soccer.ts';
+import { getTournamentTypeAvailableTeamsCount, getTournamentTypeLabel } from './utils/soccer';
+import { generateTournamentPdf } from './utils/soccer/tournament';
 import { defined } from './utils/type-guard.ts';
 
 const tournamentTypeOptions: ReadonlyArray<SelectOption<TournamentType>> = tournamentTypes.map(
@@ -31,8 +32,8 @@ export const GeneratorControls = observer(() => {
     [availableTeamsCount]
   );
 
-  const onGenerateButtonClick = () => {
-    generateTournament(tournamentType, teamsCount);
+  const onGenerateButtonClick = async () => {
+    await generateTournamentPdf(tournamentType, teamsCount);
   };
 
   return (

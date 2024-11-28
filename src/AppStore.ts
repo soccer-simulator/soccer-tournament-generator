@@ -7,7 +7,7 @@ import { createContext } from './utils/context.ts';
 import { disposePersistableStore, makeStorePersistable } from './utils/persist/persist.ts';
 import { LocalPersistableStorage } from './utils/persist/storage.ts';
 import { createPersistableLiteralPropertySerializationOptions } from './utils/persist/utils.ts';
-import { getTournamentTypeAvailableTeamsCount } from './utils/soccer.ts';
+import { getTournamentTypeAvailableTeamsCount } from './utils/soccer';
 
 const defaultTournamentType: TournamentType = 'group';
 
