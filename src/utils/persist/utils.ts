@@ -1,8 +1,6 @@
 import z from 'zod';
 
-import { tournamentTypes } from '../../constants/soccer.ts';
 import { ConfigArray, Primitive } from '../../types';
-import { TournamentType } from '../../types/soccer.ts';
 import { createZodLiteralUnionSchema } from '../zod.ts';
 
 import {

@@ -5,7 +5,7 @@ import css from './App.module.css';
 import { AppStore, AppStoreContext } from './AppStore.ts';
 import { Container } from './components/bulma/Container/Container.tsx';
 import { Header } from './components/Header.tsx';
-import { Options } from './Options.tsx';
+import { GeneratorControls } from './GeneratorControls.tsx';
 
 export const App = observer(() => {
   const [appStore] = useState(() => new AppStore());
@@ -26,7 +26,7 @@ export const App = observer(() => {
     <AppStoreContext.Provider value={appStore}>
       <Header />
       <Container className={css.container}>
-        <Options />
+        <GeneratorControls />
       </Container>
     </AppStoreContext.Provider>
   );

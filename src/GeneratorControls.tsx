@@ -9,7 +9,7 @@ import { SelectOption } from './components/bulma/Select/types.ts';
 import { tournamentTypes } from './constants/soccer.ts';
 import { TournamentType } from './types/soccer.ts';
 import { useContext } from './utils/context.ts';
-import { getTournamentTypeAvailableTeamsCount, getTournamentTypeLabel } from './utils/soccer.ts';
+import { generateTournament, getTournamentTypeAvailableTeamsCount, getTournamentTypeLabel } from './utils/soccer.ts';
 import { defined } from './utils/type-guard.ts';
 
 const tournamentTypeOptions: ReadonlyArray<SelectOption<TournamentType>> = tournamentTypes.map(
@@ -18,7 +18,7 @@ const tournamentTypeOptions: ReadonlyArray<SelectOption<TournamentType>> = tourn
   }
 );
 
-export const Options = observer(() => {
+export const GeneratorControls = observer(() => {
   const appStore = useContext(AppStoreContext);
 
   const { tournamentType, teamsCount } = appStore;
@@ -30,6 +30,10 @@ export const Options = observer(() => {
     },
     [availableTeamsCount]
   );
+
+  const onGenerateButtonClick = () => {
+    generateTournament(tournamentType, teamsCount);
+  };
 
   return (
     <>
@@ -55,7 +59,9 @@ export const Options = observer(() => {
           }}
         />
       </Field>
-      <Button type="primary">Сгенерировать</Button>
+      <Button type="primary" onClick={onGenerateButtonClick}>
+        Сгенерировать
+      </Button>
     </>
   );
 });
