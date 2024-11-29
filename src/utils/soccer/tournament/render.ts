@@ -17,6 +17,10 @@ export function getPageRenderSize(pdf: Pdf): { width: number; height: number } {
   return { width: getPageRenderWidth(pdf), height: getPageRenderHeight(pdf) };
 }
 
+export function getPageAvailableRenderHeight(shiftY: number, pdf: Pdf): number {
+  return getPageRenderHeight(pdf) - shiftY - pagePaddingVertical;
+}
+
 export function getTableHeight(rowsCount: number, addGap = false): number {
   return rowsCount * tableCellHeight + (addGap ? tableGap : 0);
 }

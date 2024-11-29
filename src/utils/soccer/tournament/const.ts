@@ -8,7 +8,7 @@ export const tableCellHeight = 20;
 export const tableGap = 12;
 
 export const pagePaddingHorizontal = 20;
-export const pagePaddingVertical = 20;
+export const pagePaddingVertical = 10;
 
 export const defaultTableStyles: Partial<Styles> = {
   font: 'Ubuntu',

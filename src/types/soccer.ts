@@ -14,6 +14,7 @@ export type Group = {
 
 export type LeagueTournament = {
   teams: Array<Team>;
+  matchDays: Array<MatchDay>;
 };
 
 export type GroupTournament = {

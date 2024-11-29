@@ -8,7 +8,8 @@ import { extractBinaryFileDataFromBase64, loadBinaryFileAsBase64 } from '../../f
 import { generateGroupTournament } from './group/generate.ts';
 import { renderGroupTournament } from './group/render.ts';
 import { generateKnockoutTournament, renderKnockoutTournament } from './knockout.ts';
-import { generateLeagueTournament, renderLeagueTournament } from './league.ts';
+import { generateLeagueTournament } from './league/generate.ts';
+import { renderLeagueTournament } from './league/render.ts';
 
 export function generateTournament(type: TournamentType, teamsCount: number): Tournament {
   if (type === 'league') {
