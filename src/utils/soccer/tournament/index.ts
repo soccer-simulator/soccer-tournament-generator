@@ -7,7 +7,8 @@ import { extractBinaryFileDataFromBase64, loadBinaryFileAsBase64 } from '../../f
 
 import { generateGroupTournament } from './group/generate.ts';
 import { renderGroupTournament } from './group/render.ts';
-import { generateKnockoutTournament, renderKnockoutTournament } from './knockout.ts';
+import { generateKnockoutTournament } from './knockout/generate.ts';
+import { renderKnockoutTournament } from './knockout/render.ts';
 import { generateLeagueTournament } from './league/generate.ts';
 import { renderLeagueTournament } from './league/render.ts';
 
