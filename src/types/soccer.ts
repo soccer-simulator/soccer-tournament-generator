@@ -4,7 +4,9 @@ import { NamedEntity } from './index.ts';
 
 export type TournamentType = (typeof tournamentTypes)[number];
 
-export type Team = NamedEntity;
+export type Team = NamedEntity & {
+  prefix?: string;
+};
 
 export type Group = {
   name: string;

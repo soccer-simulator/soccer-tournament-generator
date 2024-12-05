@@ -1,5 +1,5 @@
 import { jsPDF as Pdf } from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import autoTable, { RowInput } from 'jspdf-autotable';
 
 import { Match, MatchDay, RenderOptions } from '../../../types/soccer.ts';
 
@@ -18,6 +18,10 @@ import {
 import { getDefaultTableStyles } from './table.ts';
 import { renderText } from './text.ts';
 
+export function getMatchPrefixCellWidth(scale: number) {
+  return scale * 20;
+}
+
 export function getMatchScoreCellWidth(scale: number) {
   return scale * 25;
 }
@@ -26,22 +30,35 @@ export function renderMatchTable(match: Match, pdf: Pdf, options?: RenderOptions
   const { team1, team2, score1, score2 } = match;
 
   const scale = resolveRenderScale(options);
+
+  const prefixCellWidth = getMatchPrefixCellWidth(scale);
   const scoreCellWidth = getMatchScoreCellWidth(scale);
+
+  const hasPrefixes = !!team1.prefix || !!team2.prefix;
+
+  const row1: RowInput = [];
+  if (hasPrefixes) {
+    row1.push({ title: 'prefix', content: team1.prefix, styles: { cellWidth: prefixCellWidth, halign: 'center' } });
+  }
+  row1.push(
+    { title: 'team', content: team1.name },
+    { title: 'score', content: score1 || '', styles: { cellWidth: scoreCellWidth } }
+  );
+
+  const row2: RowInput = [];
+  if (hasPrefixes) {
+    row2.push({ title: 'prefix', content: team2.prefix, styles: { cellWidth: prefixCellWidth, halign: 'center' } });
+  }
+  row2.push(
+    { title: 'team', content: team2.name },
+    { title: 'score', content: score2 || '', styles: { cellWidth: scoreCellWidth } }
+  );
 
   autoTable(pdf, {
     theme: 'grid',
     ...applyTableRenderOptions(pdf, options),
     styles: getDefaultTableStyles(scale),
-    body: [
-      [
-        { title: 'team', content: team1.name },
-        { title: 'score', content: score1 || '', styles: { cellWidth: scoreCellWidth } }
-      ],
-      [
-        { title: 'team', content: team2.name },
-        { title: 'score', content: score2 || '', styles: { cellWidth: scoreCellWidth } }
-      ]
-    ]
+    body: [row1, row2]
   });
 }
 
