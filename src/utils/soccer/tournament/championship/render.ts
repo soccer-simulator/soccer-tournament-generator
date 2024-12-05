@@ -2,8 +2,14 @@ import { jsPDF as Pdf } from 'jspdf';
 import autoTable, { RowInput, Styles } from 'jspdf-autotable';
 
 import { RenderOptions, Team } from '../../../../types/soccer.ts';
-import { defaultTableHeadStyles, defaultTableStyles, tableGap } from '../const.ts';
-import { applyTableRenderOptions, getTableHeight, resolveRenderShiftY } from '../render.ts';
+import {
+  applyTableRenderOptions,
+  getTableHeight,
+  getTableSizes,
+  resolveRenderScale,
+  resolveRenderShiftY
+} from '../render.ts';
+import { defaultTableHeadStyles, getDefaultTableStyles } from '../table.ts';
 
 const numberCellWidth = 25;
 const resultCellWidth = 30;
@@ -25,6 +31,7 @@ export function renderChampionshipTable(
   pdf: Pdf,
   options?: ChampionshipTableRenderOptions
 ): number {
+  const scale = resolveRenderScale(options);
   const shiftY = resolveRenderShiftY(options);
   const { staging = false, stagingPrefix } = options || {};
 
@@ -58,11 +65,11 @@ export function renderChampionshipTable(
     return bodyRow;
   });
 
-  const tableOptions = applyTableRenderOptions(pdf, { ...options, shiftY: shiftY + tableGap });
+  const tableOptions = applyTableRenderOptions(pdf, { ...options, shiftY: shiftY + getTableSizes(scale).gap });
 
   autoTable(pdf, {
     theme: 'grid',
-    styles: defaultTableStyles,
+    styles: getDefaultTableStyles(scale),
     headStyles: defaultTableHeadStyles,
     ...tableOptions,
     head: [headRow],
@@ -76,5 +83,5 @@ export function renderChampionshipTable(
     }
   });
 
-  return tableOptions.startY + getTableHeight(teams.length + 1, true);
+  return tableOptions.startY + getTableHeight(teams.length + 1, scale, true);
 }

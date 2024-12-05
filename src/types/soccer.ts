@@ -43,6 +43,7 @@ export type MatchDay = {
 };
 
 export type RenderOptions = {
+  scale?: number;
   width?: number;
   shiftX?: number;
   shiftY?: number;

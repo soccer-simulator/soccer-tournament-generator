@@ -50,6 +50,5 @@ export async function generateTournamentPdf(type: TournamentType, teamsCount: nu
   pdf.addFont('Ubuntu-Medium.ttf', 'Ubuntu', 'bold');
   pdf.setFont('Ubuntu');
   renderTournament(tournament, pdf);
-  console.log(tournament);
   pdf.save('tournament.pdf');
 }

@@ -3,7 +3,10 @@ import { TableWidthType, UserOptions } from 'jspdf-autotable';
 
 import { RenderOptions } from '../../../types/soccer.ts';
 
-import { pagePaddingHorizontal, pagePaddingVertical, tableCellHeight, tableGap } from './const.ts';
+import { pagePaddingHorizontal, pagePaddingVertical } from './const.ts';
+
+const baseTableCellHeight = 20;
+const baseTableGap = 12;
 
 export function getPageRenderWidth(pdf: Pdf): number {
   return pdf.internal.pageSize.width - 2 * pagePaddingHorizontal;
@@ -21,8 +24,22 @@ export function getPageAvailableRenderHeight(shiftY: number, pdf: Pdf): number {
   return getPageRenderHeight(pdf) - shiftY - pagePaddingVertical;
 }
 
-export function getTableHeight(rowsCount: number, addGap = false): number {
-  return rowsCount * tableCellHeight + (addGap ? tableGap : 0);
+type TableSizes = {
+  cellHeight: number;
+  gap: number;
+};
+
+export function getTableSizes(scale = 1): TableSizes {
+  return { cellHeight: baseTableCellHeight * scale, gap: baseTableGap * scale };
+}
+
+export function getTableHeight(rowsCount: number, scale: number, addGap = false): number {
+  return rowsCount * getTableSizes(scale).cellHeight + (addGap ? baseTableGap : 0);
+}
+
+export function resolveRenderScale(options?: RenderOptions): number {
+  const { scale = 1 } = options || {};
+  return scale;
 }
 
 export function resolveRenderWidth(options?: RenderOptions): Exclude<TableWidthType, 'wrap'> {

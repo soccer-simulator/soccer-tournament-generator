@@ -2,9 +2,9 @@ import { jsPDF as Pdf } from 'jspdf';
 
 import { Group, GroupTournament } from '../../../../types/soccer.ts';
 import { ChampionshipTableRenderOptions, renderChampionshipTable } from '../championship/render.ts';
-import { headerSize1, pagePaddingVertical, tableGap } from '../const.ts';
+import { headerSize1, pagePaddingVertical } from '../const.ts';
 import { renderMatchDays } from '../match.ts';
-import { getPageRenderWidth, resolveRenderShiftY } from '../render.ts';
+import { getPageRenderWidth, getTableSizes, resolveRenderShiftY } from '../render.ts';
 import { renderText } from '../text.ts';
 
 export type GroupTableRenderOptions = Omit<ChampionshipTableRenderOptions, 'stagingPrefix'>;
@@ -28,7 +28,7 @@ export function renderGroupTournament(tournament: GroupTournament, pdf: Pdf): vo
     const pageWidth = getPageRenderWidth(pdf);
     const stagingWidth = 120;
     const shiftY = renderGroupTable(group, pdf, {
-      width: pageWidth - tableGap - stagingWidth,
+      width: pageWidth - getTableSizes().gap - stagingWidth,
       shiftY: pagePaddingVertical
     });
 

@@ -3,26 +3,35 @@ import autoTable from 'jspdf-autotable';
 
 import { Match, MatchDay, RenderOptions } from '../../../types/soccer.ts';
 
-import { defaultTableStyles, headerSize2, pagePaddingVertical, tableGap } from './const.ts';
+import { headerSize2, pagePaddingVertical } from './const.ts';
 import {
   applyTableRenderOptions,
   getPageAvailableRenderHeight,
   getPageRenderWidth,
   getTableHeight,
+  getTableSizes,
+  resolveRenderScale,
   resolveRenderShiftX,
   resolveRenderShiftY,
   resolveRenderWidth
 } from './render.ts';
+import { getDefaultTableStyles } from './table.ts';
 import { renderText } from './text.ts';
 
-const scoreCellWidth = 25;
+export function getMatchScoreCellWidth(scale: number) {
+  return scale * 25;
+}
 
 export function renderMatchTable(match: Match, pdf: Pdf, options?: RenderOptions): void {
   const { team1, team2, score1, score2 } = match;
+
+  const scale = resolveRenderScale(options);
+  const scoreCellWidth = getMatchScoreCellWidth(scale);
+
   autoTable(pdf, {
     theme: 'grid',
     ...applyTableRenderOptions(pdf, options),
-    styles: defaultTableStyles,
+    styles: getDefaultTableStyles(scale),
     body: [
       [
         { title: 'team', content: team1.name },
@@ -41,12 +50,14 @@ type MatchDayRenderOptions = RenderOptions & {
 };
 
 export function renderMatchDay(matchDay: MatchDay, pdf: Pdf, options?: MatchDayRenderOptions): number {
+  const scale = resolveRenderScale(options);
   const width = resolveRenderWidth(options);
   const shiftX = resolveRenderShiftX(options);
   let shiftY = resolveRenderShiftY(options);
   const { matchesPerRow = 4 } = options || {};
 
-  const tableHeight = getTableHeight(2);
+  const tableHeight = getTableHeight(2, scale);
+  const tableGap = getTableSizes(scale).gap;
 
   const renderWidth = typeof width === 'number' ? width : getPageRenderWidth(pdf);
 
