@@ -51,13 +51,13 @@ export function renderGroupTournament(tournament: GroupTournament, pdf: Pdf): vo
     const id2 = 2 * i + 2;
     if (i % 2 === 0) {
       knockoutTeams.push(
-        { id: id1, name: '', prefix: `${groups[i].name}1` },
-        { id: id2, name: '', prefix: `${groups[i + 1].name}2` }
+        { id: id1, name: '', shortName: '', prefix: `${groups[i].name}1` },
+        { id: id2, name: '', shortName: '', prefix: `${groups[i + 1].name}2` }
       );
     } else {
       knockoutTeams.push(
-        { id: id2, name: '', prefix: `${groups[i].name}1` },
-        { id: id1, name: '', prefix: `${groups[i - 1].name}2` }
+        { id: id2, name: '', shortName: '', prefix: `${groups[i].name}1` },
+        { id: id1, name: '', shortName: '', prefix: `${groups[i - 1].name}2` }
       );
     }
   }

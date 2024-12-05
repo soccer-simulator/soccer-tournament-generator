@@ -72,7 +72,7 @@ export function renderKnockoutStage(teams: Array<Team>, pdf: Pdf, options: Knock
   if (teams.length > 4) {
     const nextRoundTeams: Array<Team> = [];
     for (let i = 0; i < teams.length / 2; i += 1) {
-      nextRoundTeams.push({ id: i + 1, name: '' });
+      nextRoundTeams.push({ id: i + 1, name: '', shortName: '' });
     }
     const tableGap = getTableSizes(scale).gap;
 
@@ -138,7 +138,7 @@ export function renderKnockout(teams: Array<Team>, pdf: Pdf, options?: RenderOpt
       options: { align: 'center' }
     });
 
-    renderMatchTable({ team1: { id: 1, name: '' }, team2: { id: 2, name: '' } }, pdf, {
+    renderMatchTable({ team1: { id: 1, name: '', shortName: '' }, team2: { id: 2, name: '', shortName: '' } }, pdf, {
       scale,
       width: matchWidth,
       shiftX,
@@ -153,7 +153,7 @@ export function renderKnockout(teams: Array<Team>, pdf: Pdf, options?: RenderOpt
       options: { align: 'center' }
     });
 
-    renderMatchTable({ team1: { id: 1, name: '' }, team2: { id: 2, name: '' } }, pdf, {
+    renderMatchTable({ team1: { id: 1, name: '', shortName: '' }, team2: { id: 2, name: '', shortName: '' } }, pdf, {
       scale,
       width: matchWidth,
       shiftX,
@@ -173,7 +173,7 @@ export function renderKnockout(teams: Array<Team>, pdf: Pdf, options?: RenderOpt
       options: { align: 'center' }
     });
 
-    renderMatchTable({ team1: { id: 1, name: '' }, team2: { id: 2, name: '' } }, pdf, {
+    renderMatchTable({ team1: { id: 1, name: '', shortName: '' }, team2: { id: 2, name: '', shortName: '' } }, pdf, {
       scale,
       width: matchWidth,
       shiftX: thirdShiftX - matchWidth / 2,
@@ -188,7 +188,7 @@ export function renderKnockout(teams: Array<Team>, pdf: Pdf, options?: RenderOpt
       options: { align: 'center' }
     });
 
-    renderMatchTable({ team1: { id: 1, name: '' }, team2: { id: 2, name: '' } }, pdf, {
+    renderMatchTable({ team1: { id: 1, name: '', shortName: '' }, team2: { id: 2, name: '', shortName: '' } }, pdf, {
       scale,
       width: matchWidth,
       shiftX: finalShiftX - matchWidth / 2,

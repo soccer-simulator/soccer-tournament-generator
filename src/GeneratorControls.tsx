@@ -1,15 +1,15 @@
 import { observer } from 'mobx-react-lite';
-import { useMemo } from 'react';
 
 import { AppStoreContext } from './AppStore.ts';
 import { Button } from './components/bulma/Button/Button.tsx';
 import { Field } from './components/bulma/Field/Field.tsx';
+import { Label } from './components/bulma/Label/Label.tsx';
 import { Select } from './components/bulma/Select/Select.tsx';
 import { SelectOption } from './components/bulma/Select/types.ts';
-import { tournamentTypes } from './constants/soccer.ts';
-import { TournamentType } from './types/soccer.ts';
+import { competitions, tournamentTypes } from './constants/soccer.ts';
+import { Competition, TournamentType } from './types/soccer.ts';
 import { useContext } from './utils/context.ts';
-import { getTournamentTypeAvailableTeamsCount, getTournamentTypeLabel } from './utils/soccer';
+import { getCompetitionLabel, getTournamentTypeLabel } from './utils/soccer';
 import { generateTournamentPdf } from './utils/soccer/tournament';
 import { defined } from './utils/type-guard.ts';
 
@@ -19,12 +19,18 @@ const tournamentTypeOptions: ReadonlyArray<SelectOption<TournamentType>> = tourn
   }
 );
 
+const competitionOptions: ReadonlyArray<SelectOption<Competition | 'none'>> = [
+  { value: 'none', label: 'Любое' },
+  ...competitions.map((competition): SelectOption<Competition | 'none'> => {
+    return { value: competition, label: getCompetitionLabel(competition) };
+  })
+];
+
 export const GeneratorControls = observer(() => {
   const appStore = useContext(AppStoreContext);
 
-  const { tournamentType, teamsCount } = appStore;
+  const { competition, tournamentType, availableTeamsCount, teamsCount, selectedTeams } = appStore;
 
-  const availableTeamsCount = useMemo(() => getTournamentTypeAvailableTeamsCount(tournamentType), [tournamentType]);
   const teamsCountOptions = availableTeamsCount.map(
     (teamsCount): SelectOption => {
       return { value: teamsCount, label: teamsCount };
@@ -33,36 +39,61 @@ export const GeneratorControls = observer(() => {
   );
 
   const onGenerateButtonClick = async () => {
-    await generateTournamentPdf(tournamentType, teamsCount);
+    await generateTournamentPdf(tournamentType, teamsCount, selectedTeams);
   };
 
   return (
-    <>
-      <Field label="Тип турнира">
-        <Select
-          options={tournamentTypeOptions}
-          value={tournamentType}
-          onChange={(tournamentType) => {
-            if (defined(tournamentType)) {
-              appStore.setTournamentType(tournamentType);
-            }
-          }}
-        />
-      </Field>
-      <Field label="Количество команд">
-        <Select
-          options={teamsCountOptions}
-          value={teamsCount}
-          onChange={(teamsCount) => {
-            if (defined(teamsCount)) {
-              appStore.setTeamsCount(teamsCount);
-            }
-          }}
-        />
-      </Field>
-      <Button type="primary" onClick={onGenerateButtonClick}>
-        Сгенерировать
-      </Button>
-    </>
+    <div className="fixed-grid">
+      <div className="grid">
+        <div className="cell">
+          <Field label="Соревнование">
+            <Select
+              options={competitionOptions}
+              value={competition}
+              onChange={(competition) => {
+                if (defined(competition)) {
+                  appStore.setCompetition(competition === 'none' ? undefined : competition);
+                }
+              }}
+            ></Select>
+          </Field>
+          <Field label="Тип турнира">
+            <Select
+              options={tournamentTypeOptions}
+              value={tournamentType}
+              onChange={(tournamentType) => {
+                if (defined(tournamentType)) {
+                  appStore.setTournamentType(tournamentType);
+                }
+              }}
+            />
+          </Field>
+          <Field label="Количество команд">
+            <Select
+              options={teamsCountOptions}
+              value={teamsCount}
+              onChange={(teamsCount) => {
+                if (defined(teamsCount)) {
+                  appStore.setTeamsCount(teamsCount);
+                }
+              }}
+            />
+          </Field>
+          <Button type="primary" onClick={onGenerateButtonClick}>
+            Сгенерировать
+          </Button>
+        </div>
+        {competition && (
+          <div className="cell">
+            <Label>Команды</Label>
+            <ul>
+              {selectedTeams.map((team) => {
+                return <li key={team.id}>{team.name}</li>;
+              })}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
   );
 });

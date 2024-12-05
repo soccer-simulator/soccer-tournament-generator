@@ -2,7 +2,7 @@ import { jsPDF as Pdf } from 'jspdf';
 
 import ubuntuMediumUrl from '../../../assets/Ubuntu-Medium.ttf';
 import ubuntuRegularUrl from '../../../assets/Ubuntu-Regular.ttf';
-import { Tournament, TournamentType } from '../../../types/soccer.ts';
+import { Team, Tournament, TournamentType } from '../../../types/soccer.ts';
 import { extractBinaryFileDataFromBase64, loadBinaryFileAsBase64 } from '../../fs.ts';
 
 import { generateGroupTournament } from './group/generate.ts';
@@ -12,15 +12,15 @@ import { renderKnockoutTournament } from './knockout/render.ts';
 import { generateLeagueTournament } from './league/generate.ts';
 import { renderLeagueTournament } from './league/render.ts';
 
-export function generateTournament(type: TournamentType, teamsCount: number): Tournament {
+export function generateTournament(type: TournamentType, teamsCount: number, teams: Array<Team> = []): Tournament {
   if (type === 'league') {
-    return { type, ...generateLeagueTournament(teamsCount) };
+    return { type, ...generateLeagueTournament(teamsCount, teams) };
   }
   if (type === 'group') {
-    return { type, ...generateGroupTournament(teamsCount) };
+    return { type, ...generateGroupTournament(teamsCount, teams) };
   }
   if (type === 'knockout') {
-    return { type, ...generateKnockoutTournament(teamsCount) };
+    return { type, ...generateKnockoutTournament(teamsCount, teams) };
   }
   throw new TypeError(`Tournament type "${type}" is not supported`);
 }
@@ -36,8 +36,12 @@ export function renderTournament(tournament: Tournament, pdf: Pdf): void {
   }
 }
 
-export async function generateTournamentPdf(type: TournamentType, teamsCount: number): Promise<void> {
-  const tournament = generateTournament(type, teamsCount);
+export async function generateTournamentPdf(
+  type: TournamentType,
+  teamsCount: number,
+  teams: Array<Team> = []
+): Promise<void> {
+  const tournament = generateTournament(type, teamsCount, teams);
   const fontBinaries = await Promise.all([
     loadBinaryFileAsBase64(ubuntuRegularUrl),
     loadBinaryFileAsBase64(ubuntuMediumUrl)

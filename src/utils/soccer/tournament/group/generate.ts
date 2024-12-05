@@ -1,13 +1,19 @@
 import { Group, GroupTournament, Team } from '../../../../types/soccer.ts';
+import { drawTeams } from '../../teams';
 import { generateChampionshipMatchDays } from '../championship/generate.ts';
 import { generateTeams } from '../team.ts';
 
-export function generateGroupTournament(teamsCount: number): GroupTournament {
+export function generateGroupTournament(teamsCount: number, inputTeams: Array<Team> = []): GroupTournament {
   const teamsPerGroup = 4;
   const groupsCount = teamsCount / teamsPerGroup;
   const groups: Array<Group> = [];
 
-  const teams = generateTeams(teamsCount, false);
+  let teams: Array<Team>;
+  if (inputTeams.length === 0) {
+    teams = generateTeams(teamsCount, true);
+  } else {
+    teams = drawTeams(inputTeams.slice(0, teamsCount));
+  }
 
   for (let i = 0; i < groupsCount; i += 1) {
     const name = String.fromCharCode(65 + i);
