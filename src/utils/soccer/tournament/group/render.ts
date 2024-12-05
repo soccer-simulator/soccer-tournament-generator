@@ -62,5 +62,13 @@ export function renderGroupTournament(tournament: GroupTournament, pdf: Pdf): vo
     }
   }
 
-  renderKnockout(knockoutTeams, pdf);
+  const shiftY = renderText('Плей-офф', pdf, {
+    fontSize: headerSize1,
+    fontStyle: 'bold',
+    shiftX: getPageRenderWidth(pdf) / 2,
+    shiftY: pagePaddingVertical,
+    options: { align: 'center' }
+  });
+
+  renderKnockout(knockoutTeams, pdf, { shiftY: shiftY + getTableSizes().gap });
 }

@@ -1,7 +1,7 @@
 import { jsPDF as Pdf } from 'jspdf';
 
 import { KnockoutTournament, Match, RenderOptions, Team } from '../../../../types/soccer.ts';
-import { headerSize2, pagePaddingVertical } from '../const.ts';
+import { headerSize1, headerSize2, pagePaddingVertical } from '../const.ts';
 import { renderMatchTable } from '../match.ts';
 import {
   getPageRenderSize,
@@ -31,7 +31,7 @@ export function getKnockoutRoundsCount(teamsCount: number): number {
 }
 
 export function getKnockoutMatchWidthByCount(pdf: Pdf, matchesCount: number, scale = 1): number {
-  return (getPageRenderSize(pdf).width - (matchesCount - 1) * getTableSizes(scale).gap) / matchesCount;
+  return (getPageRenderSize(pdf).width - matchesCount * getTableSizes(scale).gap) / matchesCount;
 }
 
 type KnockoutStageRenderOptions = RenderOptions & {
@@ -40,7 +40,7 @@ type KnockoutStageRenderOptions = RenderOptions & {
   round?: number;
 };
 
-export function renderKnockoutStage(teams: Array<Team>, pdf: Pdf, options: KnockoutStageRenderOptions): void {
+export function renderKnockoutStage(teams: Array<Team>, pdf: Pdf, options: KnockoutStageRenderOptions): number {
   const scale = resolveRenderScale(options);
   const width = resolveRenderWidth(options);
   const shiftX = resolveRenderShiftX(options);
@@ -89,36 +89,39 @@ export function renderKnockoutStage(teams: Array<Team>, pdf: Pdf, options: Knock
       round: round + 1
     });
   }
+
+  return shiftY + Math.pow(2, roundsCount - 2) * getTableHeight(2, scale, true);
 }
 
-export function renderKnockout(teams: Array<Team>, pdf: Pdf): void {
+export function renderKnockout(teams: Array<Team>, pdf: Pdf, options?: RenderOptions): void {
+  const shiftY = resolveRenderShiftY(options);
+
   const roundsCount = getKnockoutRoundsCount(teams.length);
 
   let scale: number = 1;
-  let matchWidth: number;
-  if (roundsCount >= 4) {
-    if (roundsCount === 5) {
-      scale = 0.75;
-    } else if (roundsCount === 6) {
-      scale = 0.3;
-    } else {
-      // TODO: consider alternative rendering
-    }
-    matchWidth = getKnockoutMatchWidthByCount(pdf, 2 * (roundsCount - 1), scale);
+  if (roundsCount === 4) {
+    scale = 0.9;
+  } else if (roundsCount === 5) {
+    scale = 0.75;
+  } else if (roundsCount === 6) {
+    scale = 0.3;
   } else {
-    matchWidth = getKnockoutMatchWidthByCount(pdf, 2 * roundsCount - 1, scale);
+    // TODO: consider alternative rendering
   }
 
-  renderKnockoutStage(teams, pdf, {
+  const matchWidth = getKnockoutMatchWidthByCount(pdf, 2 * (roundsCount - 1), scale);
+
+  const afterShiftY = renderKnockoutStage(teams, pdf, {
     scale,
-    shiftY: pagePaddingVertical,
+    shiftY,
     matchWidth,
     roundsCount
   });
 
-  if (roundsCount >= 4) {
+  const tableGap = getTableSizes(scale).gap;
+
+  if (roundsCount > 4) {
     const shiftX = (getPageRenderWidth(pdf) - matchWidth) / 2;
-    const tableGap = getTableSizes(scale).gap;
 
     const matchHeight =
       Math.pow(2, roundsCount - 3) * getTableHeight(2, scale, true) - getTableHeight(1, scale) - tableGap - headerSize2;
@@ -131,32 +134,76 @@ export function renderKnockout(teams: Array<Team>, pdf: Pdf): void {
       fontSize: headerSize2,
       fontStyle: 'bold',
       shiftX: shiftX + matchWidth / 2,
-      shiftY: pagePaddingVertical + finalShiftY,
+      shiftY: shiftY + finalShiftY,
       options: { align: 'center' }
     });
+
     renderMatchTable({ team1: { id: 1, name: '' }, team2: { id: 2, name: '' } }, pdf, {
       scale,
       width: matchWidth,
       shiftX,
-      shiftY: pagePaddingVertical + finalShiftY + headerSize2 + 0.5 * tableGap
+      shiftY: shiftY + finalShiftY + headerSize2 + 0.5 * tableGap
     });
 
     renderText('3-е место', pdf, {
       fontSize: headerSize2,
       fontStyle: 'bold',
       shiftX: shiftX + matchWidth / 2,
-      shiftY: pagePaddingVertical + thirdShiftY,
+      shiftY: shiftY + thirdShiftY,
       options: { align: 'center' }
     });
+
     renderMatchTable({ team1: { id: 1, name: '' }, team2: { id: 2, name: '' } }, pdf, {
       scale,
       width: matchWidth,
       shiftX,
-      shiftY: pagePaddingVertical + thirdShiftY + headerSize2 + 0.5 * tableGap
+      shiftY: shiftY + thirdShiftY + headerSize2 + 0.5 * tableGap
+    });
+  } else {
+    const matchWidth = getPageRenderWidth(pdf) / 3;
+
+    const thirdShiftX = getPageRenderWidth(pdf) * 0.25;
+    const finalShiftX = getPageRenderWidth(pdf) * 0.75;
+
+    const matchShiftY = renderText('3-е место', pdf, {
+      fontSize: headerSize1,
+      fontStyle: 'bold',
+      shiftX: thirdShiftX,
+      shiftY: afterShiftY,
+      options: { align: 'center' }
+    });
+
+    renderMatchTable({ team1: { id: 1, name: '' }, team2: { id: 2, name: '' } }, pdf, {
+      scale,
+      width: matchWidth,
+      shiftX: thirdShiftX - matchWidth / 2,
+      shiftY: matchShiftY + tableGap
+    });
+
+    renderText('Финал', pdf, {
+      fontSize: headerSize1,
+      fontStyle: 'bold',
+      shiftX: finalShiftX,
+      shiftY: afterShiftY,
+      options: { align: 'center' }
+    });
+
+    renderMatchTable({ team1: { id: 1, name: '' }, team2: { id: 2, name: '' } }, pdf, {
+      scale,
+      width: matchWidth,
+      shiftX: finalShiftX - matchWidth / 2,
+      shiftY: matchShiftY + tableGap
     });
   }
 }
 
 export function renderKnockoutTournament(tournament: KnockoutTournament, pdf: Pdf): void {
-  renderKnockout(tournament.teams, pdf);
+  const shiftY = renderText('Кубок', pdf, {
+    fontSize: headerSize1,
+    fontStyle: 'bold',
+    shiftX: getPageRenderWidth(pdf) / 2,
+    shiftY: pagePaddingVertical,
+    options: { align: 'center' }
+  });
+  renderKnockout(tournament.teams, pdf, { shiftY: shiftY + getTableSizes().gap });
 }

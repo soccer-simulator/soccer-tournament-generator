@@ -67,6 +67,8 @@ type MatchDayRenderOptions = RenderOptions & {
 };
 
 export function renderMatchDay(matchDay: MatchDay, pdf: Pdf, options?: MatchDayRenderOptions): number {
+  const { number, matches } = matchDay;
+
   const scale = resolveRenderScale(options);
   const width = resolveRenderWidth(options);
   const shiftX = resolveRenderShiftX(options);
@@ -83,7 +85,6 @@ export function renderMatchDay(matchDay: MatchDay, pdf: Pdf, options?: MatchDayR
     shiftY = pagePaddingVertical;
   }
 
-  const { number, matches } = matchDay;
   shiftY =
     renderText(`Тур ${number}`, pdf, {
       shiftX,
@@ -119,8 +120,11 @@ export function renderMatchDay(matchDay: MatchDay, pdf: Pdf, options?: MatchDayR
 
 export function renderMatchDays(matchDays: Array<MatchDay>, pdf: Pdf, options?: RenderOptions): number {
   let shiftY = resolveRenderShiftY(options);
+
+  const pageWidth = getPageRenderWidth(pdf);
   matchDays.forEach((matchDay) => {
-    shiftY = renderMatchDay(matchDay, pdf, { ...options, width: getPageRenderWidth(pdf), shiftY: shiftY });
+    const shiftX = matchDay.matches.length === 2 ? pageWidth / 4 : 0;
+    shiftY = renderMatchDay(matchDay, pdf, { ...options, width: pageWidth, shiftX, shiftY });
   });
   return shiftY;
 }
