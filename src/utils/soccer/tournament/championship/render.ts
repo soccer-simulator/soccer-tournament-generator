@@ -45,8 +45,8 @@ export function renderChampionshipTable(
       const { shortName } = team;
       const key = `team-${index + 1}`;
       headRow[key] = {
-        title: `${index + 1}\n${shortName}`,
-        styles: { cellWidth: resultCellWidth, halign: 'center', fontSize: 7 }
+        title: shortName ? `${index + 1}\n${shortName}` : `${index + 1}`,
+        styles: { cellWidth: resultCellWidth, halign: 'center', fontSize: shortName ? 7 : 12 }
       };
     });
     headRow['wins'] = { title: 'В', styles: matchResultCellStyles };
