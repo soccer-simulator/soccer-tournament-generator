@@ -9,10 +9,19 @@ import { SelectProps } from './types.ts';
 import { deserializeSelectValue, serializeSelectValue } from './utils.ts';
 
 export const Select = <T extends Primitive = number>(props: SelectProps<T>) => {
-  const { className: originalClassName, type, size, options = [], value, onChange: originalOnChange } = props;
+  const {
+    className: originalClassName,
+    type,
+    size,
+    fullWidth = false,
+    options = [],
+    value,
+    onChange: originalOnChange
+  } = props;
 
   const className = classNames(
     'select',
+    fullWidth ? 'is-fullwidth' : undefined,
     defined(type) ? getComponentTypeClassName(type) : undefined,
     defined(size) ? getComponentSizeClassName(size) : undefined,
     originalClassName

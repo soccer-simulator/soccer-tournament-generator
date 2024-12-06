@@ -43,11 +43,12 @@ export const GeneratorControls = observer(() => {
   };
 
   return (
-    <div className="fixed-grid">
+    <div className="fixed-grid has-4-cols">
       <div className="grid">
         <div className="cell">
           <Field label="Соревнование">
             <Select
+              fullWidth
               options={competitionOptions}
               value={competition}
               onChange={(competition) => {
@@ -59,6 +60,7 @@ export const GeneratorControls = observer(() => {
           </Field>
           <Field label="Тип турнира">
             <Select
+              fullWidth
               options={tournamentTypeOptions}
               value={tournamentType}
               onChange={(tournamentType) => {
@@ -70,6 +72,7 @@ export const GeneratorControls = observer(() => {
           </Field>
           <Field label="Количество команд">
             <Select
+              fullWidth
               options={teamsCountOptions}
               value={teamsCount}
               onChange={(teamsCount) => {
@@ -84,7 +87,7 @@ export const GeneratorControls = observer(() => {
           </Button>
         </div>
         {competition && (
-          <div className="cell">
+          <div className="cell is-col-start-3">
             <Label>Команды</Label>
             <ul>
               {selectedTeams.map((team) => {

@@ -15,6 +15,7 @@ export type SelectProps<T extends Primitive = number, O extends SelectOption<T> 
   className?: string;
   type?: SelectType;
   size?: SelectSize;
+  fullWidth?: boolean;
   options?: ConfigArray<O>;
   value?: T;
   onChange?: (value?: T) => void;
