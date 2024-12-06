@@ -1,4 +1,5 @@
-import { createMapFnUndefined } from '../../../utils/map.ts';
+import { createMapFnUndefined } from 'map-fn';
+
 import { componentTypeClassName } from '../utils.ts';
 
 import { ButtonType } from './types.ts';

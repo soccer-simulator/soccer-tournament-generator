@@ -1,5 +1,6 @@
+import { createMapFn } from 'map-fn';
+
 import { Competition, CountryRegion, CountryTeam, Team } from '../../../types/soccer.ts';
-import { createMapFn } from '../../map.ts';
 
 let teamId = 0;
 

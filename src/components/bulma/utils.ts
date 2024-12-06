@@ -1,4 +1,5 @@
-import { createMapFnUndefined } from '../../utils/map.ts';
+import { createMapFnUndefined } from 'map-fn';
+
 import { createUnionTypeGuard } from '../../utils/type-guard.ts';
 
 import { componentType } from './const.ts';

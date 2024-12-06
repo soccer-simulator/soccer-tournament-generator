@@ -1,3 +1,5 @@
+import { createMapFn, createMapFnWithOptions } from 'map-fn';
+
 import {
   groupAvailableTeamsCount,
   knockoutAvailableTeamsCount,
@@ -5,7 +7,6 @@ import {
 } from '../../constants/soccer.ts';
 import { ConfigArray } from '../../types';
 import { Competition, TournamentType } from '../../types/soccer.ts';
-import { createMapFn, createMapFnWithOptions } from '../map.ts';
 
 export const getCompetitionLabel = createMapFn<Competition, string>({
   worldCup: 'Чемпионат Мира',

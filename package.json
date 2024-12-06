@@ -15,6 +15,7 @@
     "classnames": "^2.5.1",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
+    "map-fn": "^0.1.0",
     "mobx": "^6.13.5",
     "mobx-react-lite": "^4.0.7",
     "mobx-utils": "^6.1.0",

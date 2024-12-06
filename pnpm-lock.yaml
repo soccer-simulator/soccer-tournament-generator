@@ -20,6 +20,9 @@ importers:
       jspdf-autotable:
         specifier: ^3.8.4
         version: 3.8.4(jspdf@2.5.2)
+      map-fn:
+        specifier: ^0.1.0
+        version: 0.1.0
       mobx:
         specifier: ^6.13.5
         version: 6.13.5
@@ -1386,6 +1389,9 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
+
+  map-fn@0.1.0:
+    resolution: {integrity: sha512-TccIczvUTzGy9Mdnaeou0oZqPGoge7LtVovZ6d9zR8JOwyEAudHMyNMwVBEXxyUn/kVT4NEpc+dx/XEa3vZrXw==}
 
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
@@ -3286,6 +3292,8 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  map-fn@0.1.0: {}
 
   merge2@1.4.1: {}
 

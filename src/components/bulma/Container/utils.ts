@@ -1,4 +1,4 @@
-import { createMapFnUndefined } from '../../../utils/map.ts';
+import { createMapFnUndefined } from 'map-fn';
 
 import { ContainerType } from './types.ts';
 
