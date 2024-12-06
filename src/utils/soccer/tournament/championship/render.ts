@@ -41,9 +41,13 @@ export function renderChampionshipTable(
   };
 
   if (!staging) {
-    teams.forEach((_, index) => {
+    teams.forEach((team, index) => {
+      const { shortName } = team;
       const key = `team-${index + 1}`;
-      headRow[key] = { title: `${index + 1}`, styles: { cellWidth: resultCellWidth, halign: 'center' } };
+      headRow[key] = {
+        title: `${index + 1}\n${shortName}`,
+        styles: { cellWidth: resultCellWidth, halign: 'center', fontSize: 7 }
+      };
     });
     headRow['wins'] = { title: 'В', styles: matchResultCellStyles };
     headRow['draws'] = { title: 'Н', styles: matchResultCellStyles };

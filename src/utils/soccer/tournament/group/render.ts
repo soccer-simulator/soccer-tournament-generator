@@ -45,22 +45,26 @@ export function renderGroupTournament(tournament: GroupTournament, pdf: Pdf): vo
 
   pdf.addPage();
 
-  const knockoutTeams: Array<Team> = [];
+  const knockoutTeams1: Array<Team> = [];
+  const knockoutTeams2: Array<Team> = [];
+
   for (let i = 0; i < groups.length; i += 1) {
     const id1 = 2 * i + 1;
     const id2 = 2 * i + 2;
     if (i % 2 === 0) {
-      knockoutTeams.push(
+      knockoutTeams1.push(
         { id: id1, name: '', shortName: '', prefix: `${groups[i].name}1` },
         { id: id2, name: '', shortName: '', prefix: `${groups[i + 1].name}2` }
       );
     } else {
-      knockoutTeams.push(
+      knockoutTeams2.push(
         { id: id2, name: '', shortName: '', prefix: `${groups[i].name}1` },
         { id: id1, name: '', shortName: '', prefix: `${groups[i - 1].name}2` }
       );
     }
   }
+
+  const knockoutTeams = [...knockoutTeams1, ...knockoutTeams2];
 
   const shiftY = renderText('Плей-офф', pdf, {
     fontSize: headerSize1,
