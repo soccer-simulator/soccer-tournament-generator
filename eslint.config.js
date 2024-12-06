@@ -1,6 +1,5 @@
-import eslintEzzeConfig from 'eslint-config-ezze-ts';
-import eslintPrettierConfig from 'eslint-config-prettier';
-import eslintPrettierRecommendedPlugin from 'eslint-plugin-prettier/recommended';
+import eslintEzzePrettierConfig from 'eslint-config-ezze-prettier';
+import eslintEzzeTypeScriptConfig from 'eslint-config-ezze-ts';
 import eslintReactHooksPlugin from 'eslint-plugin-react-hooks';
 import eslintReactRefreshPlugin from 'eslint-plugin-react-refresh';
 import globals from 'globals';
@@ -23,7 +22,6 @@ export default [
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }]
     }
   },
-  ...eslintEzzeConfig,
-  eslintPrettierConfig,
-  eslintPrettierRecommendedPlugin
+  ...eslintEzzeTypeScriptConfig,
+  ...eslintEzzePrettierConfig
 ];

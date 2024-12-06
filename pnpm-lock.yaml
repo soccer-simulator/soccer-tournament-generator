@@ -60,9 +60,12 @@ importers:
       eslint:
         specifier: ^9.16.0
         version: 9.16.0
+      eslint-config-ezze-prettier:
+        specifier: 1.0.0-alpha.0
+        version: 1.0.0-alpha.0(eslint-config-prettier@9.1.0(eslint@9.16.0))(eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@9.16.0))(eslint@9.16.0)(prettier@3.4.2))(eslint@9.16.0)(prettier@3.4.2)
       eslint-config-ezze-ts:
-        specifier: file:../eslint-config-ezze-ts
-        version: file:../eslint-config-ezze-ts(@eslint/js@9.16.0)(@stylistic/eslint-plugin-js@2.11.0(eslint@9.16.0))(@stylistic/eslint-plugin-ts@2.11.0(eslint@9.16.0)(typescript@5.7.2))(eslint-plugin-import@2.31.0(eslint@9.16.0))(eslint@9.16.0)(typescript-eslint@8.17.0(eslint@9.16.0)(typescript@5.7.2))
+        specifier: 1.0.0-alpha.0
+        version: 1.0.0-alpha.0(@eslint/js@9.16.0)(@stylistic/eslint-plugin-js@2.11.0(eslint@9.16.0))(@stylistic/eslint-plugin-ts@2.11.0(eslint@9.16.0)(typescript@5.7.2))(eslint-plugin-import@2.31.0(eslint@9.16.0))(eslint@9.16.0)(typescript-eslint@8.17.0(eslint@9.16.0)(typescript@5.7.2))
       eslint-config-prettier:
         specifier: ^9.1.0
         version: 9.1.0(eslint@9.16.0)
@@ -933,8 +936,16 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  eslint-config-ezze-ts@file:../eslint-config-ezze-ts:
-    resolution: {directory: ../eslint-config-ezze-ts, type: directory}
+  eslint-config-ezze-prettier@1.0.0-alpha.0:
+    resolution: {integrity: sha512-1YlB1I7+ht2fBPH2iW6w9kSmMV28Zlepl09YCj5+lEAps2HphP6MnoI1Sh5inFZWE7YzPqFXAQXsUyf/jOCurw==}
+    peerDependencies:
+      eslint: ^9.16.0
+      eslint-config-prettier: ^9.1.0
+      eslint-plugin-prettier: ^5.2.1
+      prettier: ^3.4.2
+
+  eslint-config-ezze-ts@1.0.0-alpha.0:
+    resolution: {integrity: sha512-r3DgFd4Y6aScUmwT6mI1HlHgrIpL/N0UmvO/OavmdnaPnOihY4WZR4tKPYRFhmMZFo0q2Vog5AlRhVCG17G0Gw==}
     peerDependencies:
       '@eslint/js': ^9.16.0
       '@stylistic/eslint-plugin-js': ^2.11.0
@@ -2810,7 +2821,14 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-config-ezze-ts@file:../eslint-config-ezze-ts(@eslint/js@9.16.0)(@stylistic/eslint-plugin-js@2.11.0(eslint@9.16.0))(@stylistic/eslint-plugin-ts@2.11.0(eslint@9.16.0)(typescript@5.7.2))(eslint-plugin-import@2.31.0(eslint@9.16.0))(eslint@9.16.0)(typescript-eslint@8.17.0(eslint@9.16.0)(typescript@5.7.2)):
+  eslint-config-ezze-prettier@1.0.0-alpha.0(eslint-config-prettier@9.1.0(eslint@9.16.0))(eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@9.16.0))(eslint@9.16.0)(prettier@3.4.2))(eslint@9.16.0)(prettier@3.4.2):
+    dependencies:
+      eslint: 9.16.0
+      eslint-config-prettier: 9.1.0(eslint@9.16.0)
+      eslint-plugin-prettier: 5.2.1(eslint-config-prettier@9.1.0(eslint@9.16.0))(eslint@9.16.0)(prettier@3.4.2)
+      prettier: 3.4.2
+
+  eslint-config-ezze-ts@1.0.0-alpha.0(@eslint/js@9.16.0)(@stylistic/eslint-plugin-js@2.11.0(eslint@9.16.0))(@stylistic/eslint-plugin-ts@2.11.0(eslint@9.16.0)(typescript@5.7.2))(eslint-plugin-import@2.31.0(eslint@9.16.0))(eslint@9.16.0)(typescript-eslint@8.17.0(eslint@9.16.0)(typescript@5.7.2)):
     dependencies:
       '@eslint/js': 9.16.0
       '@stylistic/eslint-plugin-js': 2.11.0(eslint@9.16.0)
