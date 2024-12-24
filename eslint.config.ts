@@ -1,6 +1,7 @@
 import { Linter } from 'eslint';
 import eslintEzzePrettier from 'eslint-config-ezze-prettier';
 import eslintEzzeTypeScript from 'eslint-config-ezze-ts';
+// @ts-ignore https://github.com/facebook/react/issues/30119
 import eslintReactHooksPlugin from 'eslint-plugin-react-hooks';
 import eslintReactRefreshPlugin from 'eslint-plugin-react-refresh';
 import globals from 'globals';
