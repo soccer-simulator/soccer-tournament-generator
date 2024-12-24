@@ -1,6 +1,6 @@
 import { Linter } from 'eslint';
-import eslintEzzePrettierConfig from 'eslint-config-ezze-prettier';
-import eslintEzzeTypeScriptConfig from 'eslint-config-ezze-ts';
+import eslintEzzePrettier from 'eslint-config-ezze-prettier';
+import eslintEzzeTypeScript from 'eslint-config-ezze-ts';
 import eslintReactHooksPlugin from 'eslint-plugin-react-hooks';
 import eslintReactRefreshPlugin from 'eslint-plugin-react-refresh';
 import globals from 'globals';
@@ -23,8 +23,8 @@ const config: Array<Linter.Config> = [
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }]
     }
   },
-  ...eslintEzzeTypeScriptConfig,
-  ...eslintEzzePrettierConfig
+  ...eslintEzzeTypeScript,
+  ...eslintEzzePrettier
 ];
 
 export default config;
