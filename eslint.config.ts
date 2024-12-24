@@ -1,12 +1,13 @@
+import { Linter } from 'eslint';
 import eslintEzzePrettierConfig from 'eslint-config-ezze-prettier';
 import eslintEzzeTypeScriptConfig from 'eslint-config-ezze-ts';
 import eslintReactHooksPlugin from 'eslint-plugin-react-hooks';
 import eslintReactRefreshPlugin from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 
-export default [
+const config: Array<Linter.Config> = [
+  { ignores: ['dist', 'node_modules'] },
   {
-    ignores: ['dist', 'node_modules'],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
@@ -25,3 +26,5 @@ export default [
   ...eslintEzzeTypeScriptConfig,
   ...eslintEzzePrettierConfig
 ];
+
+export default config;

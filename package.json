@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint . --flag unstable_ts_config",
     "preview": "vite preview"
   },
   "prettier": "prettier-config-ezze",
@@ -39,6 +39,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.13.0",
+    "jiti": "^2.4.2",
     "prettier": "^3.4.2",
     "prettier-config-ezze": "^1.0.0",
     "typescript": "~5.7.2",
