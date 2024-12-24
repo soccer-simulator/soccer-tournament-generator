@@ -11,7 +11,9 @@ export default defineConfig({
       }
     }),
     checker({
-      typescript: true,
+      typescript: {
+        tsconfigPath: './tsconfig.app.json'
+      },
       eslint: { lintCommand: 'eslint "./src/**/*.{ts,tsx}"', useFlatConfig: true }
     })
   ]
