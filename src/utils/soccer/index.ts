@@ -8,7 +8,7 @@ import {
   LEAGUE_AVAILABLE_TEAMS_COUNT
 } from '../../constants/soccer.ts';
 import { ConfigArray } from '../../types';
-import { NationalCompetition, ClubCompetition, TournamentType } from '../../types/soccer.ts';
+import { NationalCompetition, ClubCompetition, TournamentType, TeamOrder } from '../../types/soccer.ts';
 import { createUnionTypeGuard } from '../type-guard.ts';
 
 export const getNationalCompetitionLabel = createMapFnStrict<NationalCompetition, string>({
@@ -47,6 +47,12 @@ export const getTournamentTypeAvailableTeamsCount = createArgumentMapFnStrict<
   league: (maxCount) => normalizeTeamsCount(LEAGUE_AVAILABLE_TEAMS_COUNT, maxCount),
   group: (maxCount) => normalizeTeamsCount(GROUP_AVAILABLE_TEAMS_COUNT, maxCount),
   knockout: (maxCount) => normalizeTeamsCount(KNOCKOUT_AVAILABLE_TEAMS_COUNT, maxCount)
+});
+
+export const getTeamOrderLabel = createMapFnStrict<TeamOrder, string>({
+  default: 'По умолчанию',
+  alphabetical: 'По алфавиту',
+  draw: 'Жеребьёвка'
 });
 
 export const isNationalCompetition = createUnionTypeGuard<NationalCompetition>(NATIONAL_COMPETITIONS);

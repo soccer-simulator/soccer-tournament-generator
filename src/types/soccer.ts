@@ -1,4 +1,10 @@
-import { CLUB_COMPETITIONS, REGIONS, NATIONAL_COMPETITIONS, TOURNAMENT_TYPES } from '../constants/soccer.ts';
+import {
+  CLUB_COMPETITIONS,
+  REGIONS,
+  NATIONAL_COMPETITIONS,
+  TOURNAMENT_TYPES,
+  TEAM_ORDERS
+} from '../constants/soccer.ts';
 
 import { NamedEntity } from './index.ts';
 
@@ -56,6 +62,8 @@ export type MatchDay = {
   number: number;
   matches: Array<Match>;
 };
+
+export type TeamOrder = (typeof TEAM_ORDERS)[number];
 
 export type RenderOptions = {
   scale?: number;

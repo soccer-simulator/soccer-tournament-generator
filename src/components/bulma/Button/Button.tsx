@@ -7,7 +7,7 @@ import { ButtonProps } from './types.ts';
 import { getButtonTypeClassName } from './utils.ts';
 
 export const Button = (props: ButtonProps) => {
-  const { className: originalClassName, type, dark, size, onClick, children } = props;
+  const { className: originalClassName, type, dark, size, disabled = false, onClick, children } = props;
 
   const className = classNames(
     'button',
@@ -18,7 +18,7 @@ export const Button = (props: ButtonProps) => {
   );
 
   return (
-    <button className={className} onClick={onClick}>
+    <button className={className} disabled={disabled} onClick={onClick}>
       {children}
     </button>
   );

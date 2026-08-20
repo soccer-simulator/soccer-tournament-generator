@@ -51,8 +51,9 @@ export async function makeStorePersistable<
 
   const disposers = properties.map((property) => {
     const { name, serialize } = normalizePersistableProperty(property);
+
     return reaction(
-      () => store[name],
+      () => (Array.isArray(store[name]) ? (store[name].slice() as S[N]) : store[name]),
       async (value) => {
         const serializedValue = serializePersistablePropertyValue(value, serialize);
         persistableValue = evaluatePersistableValue(persistableValue, { [name]: serializedValue });

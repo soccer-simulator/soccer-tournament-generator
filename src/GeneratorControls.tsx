@@ -7,20 +7,25 @@ import { Field } from './components/bulma/Field/Field.tsx';
 import { Label } from './components/bulma/Label/Label.tsx';
 import { Select } from './components/bulma/Select/Select.tsx';
 import { SelectOption } from './components/bulma/Select/types.ts';
-import { CLUB_COMPETITIONS, NATIONAL_COMPETITIONS, TOURNAMENT_TYPES } from './constants/soccer.ts';
-import { ClubCompetition, Competition, NationalCompetition, TournamentType } from './types/soccer.ts';
+import { CLUB_COMPETITIONS, NATIONAL_COMPETITIONS, TEAM_ORDERS, TOURNAMENT_TYPES } from './constants/soccer.ts';
+import { ClubCompetition, Competition, NationalCompetition, TeamOrder, TournamentType } from './types/soccer.ts';
 import { useContext } from './utils/context.ts';
-import { getClubCompetitionLabel, getNationalCompetitionLabel, getTournamentTypeLabel } from './utils/soccer';
+import {
+  getClubCompetitionLabel,
+  getNationalCompetitionLabel,
+  getTeamOrderLabel,
+  getTournamentTypeLabel
+} from './utils/soccer';
 import { generateTournamentPdf } from './utils/soccer/tournament';
 import { defined } from './utils/type-guard.ts';
 
-const tournamentTypeOptions: ReadonlyArray<SelectOption<TournamentType>> = TOURNAMENT_TYPES.map(
+const TOURNAMENT_TYPE_OPTIONS: ReadonlyArray<SelectOption<TournamentType>> = TOURNAMENT_TYPES.map(
   (tournamentType): SelectOption<TournamentType> => {
     return { value: tournamentType, label: getTournamentTypeLabel(tournamentType) };
   }
 );
 
-const competitionOptions: ReadonlyArray<SelectOption<Competition | 'none'>> = [
+const COMPETITION_OPTIONS: ReadonlyArray<SelectOption<Competition | 'none'>> = [
   { value: 'none', label: 'Любое' },
   ...NATIONAL_COMPETITIONS.map((competition): SelectOption<NationalCompetition> => {
     return { value: competition, label: getNationalCompetitionLabel(competition) };
@@ -30,11 +35,24 @@ const competitionOptions: ReadonlyArray<SelectOption<Competition | 'none'>> = [
   })
 ];
 
+const TEAM_ORDER_OPTIONS: ReadonlyArray<SelectOption<TeamOrder>> = TEAM_ORDERS.map((teamOrder) => {
+  return { value: teamOrder, label: getTeamOrderLabel(teamOrder) };
+});
+
 export const GeneratorControls = observer(() => {
   const appStore = useContext(AppStoreContext);
 
-  const { competition, tournamentType, renderLeagueMatchDays, availableTeamsCount, teamsCount, selectedTeams } =
-    appStore;
+  const {
+    competition,
+    tournamentType,
+    leagueMatchDays,
+    availableTeamsCount,
+    teamsCount,
+    teamOrder,
+    evaluatedTeams,
+    selectedTeams,
+    teamSelectionValid
+  } = appStore;
 
   const teamsCountOptions = availableTeamsCount.map(
     (teamsCount): SelectOption => {
@@ -44,7 +62,7 @@ export const GeneratorControls = observer(() => {
   );
 
   const onGenerateButtonClick = async () => {
-    await generateTournamentPdf(tournamentType, teamsCount, selectedTeams, { renderLeagueMatchDays });
+    await generateTournamentPdf(tournamentType, { teamsCount, teams: selectedTeams, teamOrder, leagueMatchDays });
   };
 
   return (
@@ -54,7 +72,7 @@ export const GeneratorControls = observer(() => {
           <Field label="Соревнование">
             <Select
               fullWidth
-              options={competitionOptions}
+              options={COMPETITION_OPTIONS}
               value={competition}
               onChange={(competition) => {
                 appStore.setCompetition(competition === 'none' ? undefined : competition);
@@ -64,7 +82,7 @@ export const GeneratorControls = observer(() => {
           <Field label="Тип турнира">
             <Select
               fullWidth
-              options={tournamentTypeOptions}
+              options={TOURNAMENT_TYPE_OPTIONS}
               value={tournamentType}
               onChange={(tournamentType) => {
                 if (defined(tournamentType)) {
@@ -85,28 +103,54 @@ export const GeneratorControls = observer(() => {
               }}
             />
           </Field>
+          <Field>
+            <Select
+              fullWidth
+              options={TEAM_ORDER_OPTIONS}
+              value={teamOrder}
+              onChange={(teamOrder) => {
+                if (defined(teamOrder)) {
+                  appStore.setTeamOrder(teamOrder);
+                }
+              }}
+            />
+          </Field>
           {tournamentType === 'league' && (
             <Field>
               <Checkbox
-                value={renderLeagueMatchDays}
+                value={leagueMatchDays}
                 onChange={(renderLeaguesMatches) => {
-                  appStore.setRenderLeagueMatchDays(renderLeaguesMatches);
+                  appStore.setLeagueMatchDays(renderLeaguesMatches);
                 }}
               >
                 Отрисовать матчи по турам
               </Checkbox>
             </Field>
           )}
-          <Button type="primary" onClick={onGenerateButtonClick}>
+          <Button type="primary" disabled={!teamSelectionValid} onClick={onGenerateButtonClick}>
             Сгенерировать
           </Button>
         </div>
         {competition && (
           <div className="cell is-col-start-3">
-            <Label>Команды</Label>
+            <Label>
+              Команды ({selectedTeams.length} / {teamsCount})
+            </Label>
             <ul>
-              {selectedTeams.map((team) => {
-                return <li key={team.id}>{team.name}</li>;
+              {evaluatedTeams.map((team) => {
+                const selected = appStore.teamSelected(team);
+                return (
+                  <li key={team.id}>
+                    <Checkbox
+                      value={selected}
+                      onChange={(selected) => {
+                        appStore.setTeamSelected(team.id, selected);
+                      }}
+                    >
+                      {team.name}
+                    </Checkbox>
+                  </li>
+                );
               })}
             </ul>
           </div>

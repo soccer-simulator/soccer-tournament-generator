@@ -48,7 +48,7 @@ const nationalTeams: Array<NationalTeam> = [
   createCountryTeam({ name: 'Сербия', shortName: 'СЕР', region: 'europe' })
 ];
 
-export const getNationalCompetitionTeams = createMapFn<NationalCompetition, Array<Team>>({
+export const getNationalTeams = createMapFn<NationalCompetition, Array<Team>>({
   worldCup: nationalTeams,
   euroCup: nationalTeams.filter((country) => country.region === 'europe'),
   copaAmerica: nationalTeams.filter((country) => country.region === 'southAmerica'),

@@ -22,6 +22,7 @@ export type ButtonSize = ComponentSize;
 export type ButtonProps = ButtonTypeProps & {
   className?: string;
   size?: ButtonSize;
+  disabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   children?: ReactNode;
 };

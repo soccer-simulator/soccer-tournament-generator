@@ -2,8 +2,11 @@ import { Group, GroupTournament, Team } from '../../../../types/soccer.ts';
 import { drawTeams } from '../../teams';
 import { generateChampionshipMatchDays } from '../championship/generate.ts';
 import { generateTeams } from '../team.ts';
+import { TournamentOptions } from '../types.ts';
 
-export function generateGroupTournament(teamsCount: number, inputTeams: Array<Team> = []): GroupTournament {
+export function generateGroupTournament(options: TournamentOptions): GroupTournament {
+  const { teamsCount, teams: inputTeams } = options;
+
   const teamsPerGroup = 4;
   const groupsCount = teamsCount / teamsPerGroup;
   const groups: Array<Group> = [];
