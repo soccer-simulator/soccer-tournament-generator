@@ -38,21 +38,15 @@ export function renderMatchTable(match: Match, pdf: Pdf, options?: RenderOptions
 
   const row1: RowInput = [];
   if (hasPrefixes) {
-    row1.push({ title: 'prefix', content: team1.prefix, styles: { cellWidth: prefixCellWidth, halign: 'center' } });
+    row1.push({ content: team1.prefix, styles: { cellWidth: prefixCellWidth, halign: 'center' } });
   }
-  row1.push(
-    { title: 'team', content: team1.name },
-    { title: 'score', content: score1 || '', styles: { cellWidth: scoreCellWidth } }
-  );
+  row1.push({ content: team1.name }, { content: score1 || '', styles: { cellWidth: scoreCellWidth } });
 
   const row2: RowInput = [];
   if (hasPrefixes) {
-    row2.push({ title: 'prefix', content: team2.prefix, styles: { cellWidth: prefixCellWidth, halign: 'center' } });
+    row2.push({ content: team2.prefix, styles: { cellWidth: prefixCellWidth, halign: 'center' } });
   }
-  row2.push(
-    { title: 'team', content: team2.name },
-    { title: 'score', content: score2 || '', styles: { cellWidth: scoreCellWidth } }
-  );
+  row2.push({ content: team2.name }, { content: score2 || '', styles: { cellWidth: scoreCellWidth } });
 
   autoTable(pdf, {
     theme: 'grid',

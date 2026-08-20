@@ -1,10 +1,16 @@
-import { Linter } from 'eslint';
+import { ESLint, Linter } from 'eslint';
 import eslintEzzePrettier from 'eslint-config-ezze-prettier';
 import eslintEzzeTypeScript from 'eslint-config-ezze-ts';
-// @ts-ignore https://github.com/facebook/react/issues/30119
 import eslintReactHooksPlugin from 'eslint-plugin-react-hooks';
 import eslintReactRefreshPlugin from 'eslint-plugin-react-refresh';
 import globals from 'globals';
+
+// eslint-plugin-react-hooks bundles a `configs.flat` shape that isn't assignable to Linter.Plugin,
+// so only the fields the flat config actually needs (meta, rules) are registered here
+const eslintReactHooksFlatPlugin: ESLint.Plugin = {
+  meta: eslintReactHooksPlugin.meta,
+  rules: eslintReactHooksPlugin.rules
+};
 
 const config: Array<Linter.Config> = [
   { ignores: ['dist', 'node_modules'] },
@@ -15,7 +21,7 @@ const config: Array<Linter.Config> = [
       globals: globals.browser
     },
     plugins: {
-      'react-hooks': eslintReactHooksPlugin,
+      'react-hooks': eslintReactHooksFlatPlugin,
       'react-refresh': eslintReactRefreshPlugin
     },
     rules: {

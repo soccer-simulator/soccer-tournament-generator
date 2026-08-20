@@ -2,7 +2,7 @@ import z, { ZodLiteral } from 'zod';
 
 import { ConfigArray, Primitive } from '../types';
 
-export function isZodLiteralUnion<T extends ZodLiteral<unknown>>(literals: T[]): literals is [T, T, ...T[]] {
+export function isZodLiteralUnion<T extends ZodLiteral<Primitive>>(literals: T[]): literals is [T, T, ...T[]] {
   return literals.length >= 2;
 }
 

@@ -1,4 +1,4 @@
-import { createMapFn, createMapFnWithOptions } from 'map-fn';
+import { createMapFnStrict, createArgumentMapFnStrict } from 'map-fn';
 
 import {
   groupAvailableTeamsCount,
@@ -8,12 +8,12 @@ import {
 import { ConfigArray } from '../../types';
 import { Competition, TournamentType } from '../../types/soccer.ts';
 
-export const getCompetitionLabel = createMapFn<Competition, string>({
+export const getCompetitionLabel = createMapFnStrict<Competition, string>({
   worldCup: 'Чемпионат Мира',
   euroCup: 'Чемпионат Европы'
 });
 
-export const getTournamentTypeLabel = createMapFn<TournamentType, string>({
+export const getTournamentTypeLabel = createMapFnStrict<TournamentType, string>({
   league: 'Лига',
   group: 'Групповой турнир + Плей-офф',
   knockout: 'Кубок'
@@ -23,7 +23,7 @@ function normalizeTeamsCount(teamsCount: ConfigArray<number>, maxCount: number):
   return maxCount > 0 ? teamsCount.filter((count) => count <= maxCount) : [...teamsCount];
 }
 
-export const getTournamentTypeAvailableTeamsCount = createMapFnWithOptions<
+export const getTournamentTypeAvailableTeamsCount = createArgumentMapFnStrict<
   TournamentType,
   ReadonlyArray<number>,
   number

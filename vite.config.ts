@@ -1,3 +1,4 @@
+import babel from '@rolldown/plugin-babel';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
@@ -5,10 +6,9 @@ import checker from 'vite-plugin-checker';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react({
-      babel: {
-        plugins: [['@babel/plugin-proposal-decorators', { version: '2023-05' }]]
-      }
+    react(),
+    babel({
+      plugins: [['@babel/plugin-proposal-decorators', { version: '2023-11' }]]
     }),
     checker({
       typescript: {

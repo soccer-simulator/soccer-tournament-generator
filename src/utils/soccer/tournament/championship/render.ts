@@ -36,8 +36,8 @@ export function renderChampionshipTable(
   const { staging = false, stagingPrefix } = options || {};
 
   const headRow: RowInput = {
-    number: { title: '№', styles: { cellWidth: numberCellWidth, halign: 'right' } },
-    team: { title: 'Команда', styles: { halign: 'left' } }
+    number: { content: '№', styles: { cellWidth: numberCellWidth, halign: 'right' } },
+    team: { content: 'Команда', styles: { halign: 'left' } }
   };
 
   if (!staging) {
@@ -45,18 +45,18 @@ export function renderChampionshipTable(
       const { shortName } = team;
       const key = `team-${index + 1}`;
       headRow[key] = {
-        title: shortName ? `${index + 1}\n${shortName}` : `${index + 1}`,
+        content: shortName ? `${index + 1}\n${shortName}` : `${index + 1}`,
         styles: { cellWidth: resultCellWidth, halign: 'center', fontSize: shortName ? 7 : 12 }
       };
     });
-    headRow['wins'] = { title: 'В', styles: matchResultCellStyles };
-    headRow['draws'] = { title: 'Н', styles: matchResultCellStyles };
-    headRow['defeats'] = { title: 'П', styles: matchResultCellStyles };
-    headRow['goalsScored'] = { title: 'ЗМ', styles: goalsCellStyles };
-    headRow['goalsMissed'] = { title: 'ПМ', styles: goalsCellStyles };
-    headRow['goalsDifference'] = { title: 'РМ', styles: goalsCellStyles };
-    headRow['points'] = { title: 'О', styles: { cellWidth: pointsCellWidth, halign: 'center' } };
-    headRow['place'] = { title: 'М', styles: { cellWidth: placeCellWidth, halign: 'center' } };
+    headRow['wins'] = { content: 'В', styles: matchResultCellStyles };
+    headRow['draws'] = { content: 'Н', styles: matchResultCellStyles };
+    headRow['defeats'] = { content: 'П', styles: matchResultCellStyles };
+    headRow['goalsScored'] = { content: 'ЗМ', styles: goalsCellStyles };
+    headRow['goalsMissed'] = { content: 'ПМ', styles: goalsCellStyles };
+    headRow['goalsDifference'] = { content: 'РМ', styles: goalsCellStyles };
+    headRow['points'] = { content: 'О', styles: { cellWidth: pointsCellWidth, halign: 'center' } };
+    headRow['place'] = { content: 'М', styles: { cellWidth: placeCellWidth, halign: 'center' } };
   }
 
   const body: Array<RowInput> = teams.map((team, index): RowInput => {
