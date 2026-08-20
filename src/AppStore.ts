@@ -10,18 +10,21 @@ import { createPersistableLiteralPropertySerializationOptions } from './utils/pe
 import { getTournamentTypeAvailableTeamsCount } from './utils/soccer';
 import { getCompetitionTeams } from './utils/soccer/teams/countries.ts';
 
-const defaultTournamentType: TournamentType = 'group';
+const DEFAULT_TOURNAMENT_TYPE: TournamentType = 'group';
+const DEFAULT_RENDER_LEAGUES_MATCH_DAYS: boolean = true;
 
 export class AppStore implements StoreInterface {
   @observable accessor initialized = false;
 
   @observable accessor competition: Competition | undefined = undefined;
 
-  @observable accessor tournamentType: TournamentType = 'group';
+  @observable accessor tournamentType: TournamentType = DEFAULT_TOURNAMENT_TYPE;
 
-  @observable accessor teamsCount = getTournamentTypeAvailableTeamsCount(defaultTournamentType, 0)[0];
+  @observable accessor teamsCount = getTournamentTypeAvailableTeamsCount(DEFAULT_TOURNAMENT_TYPE, 0)[0];
 
   @observable accessor groupTeamsCount = 4;
+
+  @observable accessor renderLeagueMatchDays = DEFAULT_RENDER_LEAGUES_MATCH_DAYS;
 
   disposeAvailableTeamsCount: IReactionDisposer;
 
@@ -62,7 +65,8 @@ export class AppStore implements StoreInterface {
           ...createPersistableLiteralPropertySerializationOptions<AppStore, 'tournamentType'>(tournamentTypes)
         },
         'teamsCount',
-        'competition'
+        'competition',
+        'renderLeagueMatchDays'
       ]
     });
 
@@ -86,6 +90,10 @@ export class AppStore implements StoreInterface {
 
   @action setTeamsCount(teamsCount: number): void {
     this.teamsCount = teamsCount;
+  }
+
+  @action setRenderLeagueMatchDays(renderLeagueMatchDays: boolean): void {
+    this.renderLeagueMatchDays = renderLeagueMatchDays;
   }
 }
 

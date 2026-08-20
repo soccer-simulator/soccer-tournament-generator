@@ -5,8 +5,8 @@ import { RenderOptions } from '../../../types/soccer.ts';
 
 import { pagePaddingHorizontal, pagePaddingVertical } from './const.ts';
 
-const baseTableCellHeight = 20;
-const baseTableGap = 12;
+const BASE_TABLE_CELL_HEIGHT = 20;
+const BASE_TABLE_GAP = 12;
 
 export function getPageRenderWidth(pdf: Pdf): number {
   return pdf.internal.pageSize.width - 2 * pagePaddingHorizontal;
@@ -30,11 +30,11 @@ type TableSizes = {
 };
 
 export function getTableSizes(scale = 1): TableSizes {
-  return { cellHeight: baseTableCellHeight * scale, gap: baseTableGap * scale };
+  return { cellHeight: BASE_TABLE_CELL_HEIGHT * scale, gap: BASE_TABLE_GAP * scale };
 }
 
 export function getTableHeight(rowsCount: number, scale: number, addGap = false): number {
-  return rowsCount * getTableSizes(scale).cellHeight + (addGap ? baseTableGap : 0);
+  return rowsCount * getTableSizes(scale).cellHeight + (addGap ? BASE_TABLE_GAP : 0);
 }
 
 export function resolveRenderScale(options?: RenderOptions): number {

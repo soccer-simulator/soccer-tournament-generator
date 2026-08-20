@@ -33,7 +33,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.0.5",
-    "eslint": "^10.8.1",
+    "eslint": "^9.39.5",
     "eslint-config-ezze-prettier": "1.0.0-alpha.1",
     "eslint-config-ezze-ts": "1.0.0-alpha.2",
     "eslint-config-prettier": "^10.1.8",

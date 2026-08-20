@@ -88,7 +88,8 @@ export function renderMatchDay(matchDay: MatchDay, pdf: Pdf, options?: MatchDayR
       fontSize: headerSize2
     }) + tableGap;
 
-  const rowsCount = Math.ceil(matches.length / matchesPerRow);
+  let rowShiftY = shiftY;
+  let previousRowIndex = 0;
 
   for (let i = 0; i < matches.length; i += 1) {
     const match = matches[i];
@@ -97,19 +98,24 @@ export function renderMatchDay(matchDay: MatchDay, pdf: Pdf, options?: MatchDayR
     const rowIndex = Math.floor(i / matchesPerRow);
     const columnIndex = i % matchesPerRow;
 
-    if (columnIndex === 0 && getPageAvailableRenderHeight(shiftY, pdf) < tableHeight) {
+    if (rowIndex > previousRowIndex) {
+      rowShiftY += tableHeight + tableGap;
+      previousRowIndex = rowIndex;
+    }
+
+    if (columnIndex === 0 && getPageAvailableRenderHeight(rowShiftY, pdf) < tableHeight) {
       pdf.addPage();
-      shiftY = pagePaddingVertical;
+      rowShiftY = pagePaddingVertical;
     }
 
     renderMatchTable(match, pdf, {
       width,
       shiftX: shiftX + columnIndex * (width + tableGap),
-      shiftY: shiftY + rowIndex * (tableHeight + tableGap)
+      shiftY: rowShiftY
     });
   }
 
-  return shiftY + rowsCount * (tableHeight + tableGap);
+  return rowShiftY + tableHeight + tableGap;
 }
 
 export function renderMatchDays(matchDays: Array<MatchDay>, pdf: Pdf, options?: RenderOptions): number {

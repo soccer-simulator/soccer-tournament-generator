@@ -11,6 +11,7 @@ import { generateKnockoutTournament } from './knockout/generate.ts';
 import { renderKnockoutTournament } from './knockout/render.ts';
 import { generateLeagueTournament } from './league/generate.ts';
 import { renderLeagueTournament } from './league/render.ts';
+import { RenderTournamentOptions } from './types.ts';
 
 export function generateTournament(type: TournamentType, teamsCount: number, teams: Array<Team> = []): Tournament {
   if (type === 'league') {
@@ -25,10 +26,10 @@ export function generateTournament(type: TournamentType, teamsCount: number, tea
   throw new TypeError(`Tournament type "${type}" is not supported`);
 }
 
-export function renderTournament(tournament: Tournament, pdf: Pdf): void {
+export function renderTournament(tournament: Tournament, pdf: Pdf, options?: RenderTournamentOptions): void {
   const { type } = tournament;
   if (type === 'league') {
-    renderLeagueTournament(tournament, pdf);
+    renderLeagueTournament(tournament, pdf, options);
   } else if (type === 'group') {
     renderGroupTournament(tournament, pdf);
   } else if (type === 'knockout') {
@@ -39,7 +40,8 @@ export function renderTournament(tournament: Tournament, pdf: Pdf): void {
 export async function generateTournamentPdf(
   type: TournamentType,
   teamsCount: number,
-  teams: Array<Team> = []
+  teams: Array<Team> = [],
+  options?: RenderTournamentOptions
 ): Promise<void> {
   const tournament = generateTournament(type, teamsCount, teams);
   const fontBinaries = await Promise.all([
@@ -53,6 +55,6 @@ export async function generateTournamentPdf(
   pdf.addFileToVFS('Ubuntu-Medium.ttf', ubuntuMedium.data);
   pdf.addFont('Ubuntu-Medium.ttf', 'Ubuntu', 'bold');
   pdf.setFont('Ubuntu');
-  renderTournament(tournament, pdf);
+  renderTournament(tournament, pdf, options);
   pdf.save('tournament.pdf');
 }

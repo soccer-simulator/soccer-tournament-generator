@@ -14,7 +14,6 @@ export const Button = (props: ButtonProps) => {
     defined(type) ? getButtonTypeClassName(type) : undefined,
     defined(type) && isComponentType(type) && dark ? 'is-dark' : undefined,
     defined(size) ? getComponentSizeClassName(size) : undefined,
-
     originalClassName
   );
 

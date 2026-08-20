@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite';
 
 import { AppStoreContext } from './AppStore.ts';
 import { Button } from './components/bulma/Button/Button.tsx';
+import { Checkbox } from './components/bulma/Checkbox/Checkbox.tsx';
 import { Field } from './components/bulma/Field/Field.tsx';
 import { Label } from './components/bulma/Label/Label.tsx';
 import { Select } from './components/bulma/Select/Select.tsx';
@@ -29,7 +30,8 @@ const competitionOptions: ReadonlyArray<SelectOption<Competition | 'none'>> = [
 export const GeneratorControls = observer(() => {
   const appStore = useContext(AppStoreContext);
 
-  const { competition, tournamentType, availableTeamsCount, teamsCount, selectedTeams } = appStore;
+  const { competition, tournamentType, renderLeagueMatchDays, availableTeamsCount, teamsCount, selectedTeams } =
+    appStore;
 
   const teamsCountOptions = availableTeamsCount.map(
     (teamsCount): SelectOption => {
@@ -39,7 +41,7 @@ export const GeneratorControls = observer(() => {
   );
 
   const onGenerateButtonClick = async () => {
-    await generateTournamentPdf(tournamentType, teamsCount, selectedTeams);
+    await generateTournamentPdf(tournamentType, teamsCount, selectedTeams, { renderLeagueMatchDays });
   };
 
   return (
@@ -52,9 +54,7 @@ export const GeneratorControls = observer(() => {
               options={competitionOptions}
               value={competition}
               onChange={(competition) => {
-                if (defined(competition)) {
-                  appStore.setCompetition(competition === 'none' ? undefined : competition);
-                }
+                appStore.setCompetition(competition === 'none' ? undefined : competition);
               }}
             ></Select>
           </Field>
@@ -82,6 +82,18 @@ export const GeneratorControls = observer(() => {
               }}
             />
           </Field>
+          {tournamentType === 'league' && (
+            <Field>
+              <Checkbox
+                value={renderLeagueMatchDays}
+                onChange={(renderLeaguesMatches) => {
+                  appStore.setRenderLeagueMatchDays(renderLeaguesMatches);
+                }}
+              >
+                Отрисовать матчи по турам
+              </Checkbox>
+            </Field>
+          )}
           <Button type="primary" onClick={onGenerateButtonClick}>
             Сгенерировать
           </Button>
