@@ -1,16 +1,32 @@
 import { createMapFnStrict, createArgumentMapFnStrict } from 'map-fn';
 
 import {
-  groupAvailableTeamsCount,
-  knockoutAvailableTeamsCount,
-  leagueAvailableTeamsCount
+  CLUB_COMPETITIONS,
+  NATIONAL_COMPETITIONS,
+  GROUP_AVAILABLE_TEAMS_COUNT,
+  KNOCKOUT_AVAILABLE_TEAMS_COUNT,
+  LEAGUE_AVAILABLE_TEAMS_COUNT
 } from '../../constants/soccer.ts';
 import { ConfigArray } from '../../types';
-import { Competition, TournamentType } from '../../types/soccer.ts';
+import { NationalCompetition, ClubCompetition, TournamentType } from '../../types/soccer.ts';
+import { createUnionTypeGuard } from '../type-guard.ts';
 
-export const getCompetitionLabel = createMapFnStrict<Competition, string>({
+export const getNationalCompetitionLabel = createMapFnStrict<NationalCompetition, string>({
   worldCup: 'Чемпионат Мира',
-  euroCup: 'Чемпионат Европы'
+  euroCup: 'Чемпионат Европы',
+  copaAmerica: 'Кубок Америки',
+  concacafCup: 'Кубок КОНКАКАФ',
+  africaNationsCup: 'Африканский Кубок Наций',
+  asianCup: 'Кубок Азии',
+  ofkNationsCup: 'Кубок Наций ОФК'
+});
+
+export const getClubCompetitionLabel = createMapFnStrict<ClubCompetition, string>({
+  england: 'Чемпионат Англии',
+  germany: 'Чемпионат Германии',
+  spain: 'Чемпионат Испании',
+  italy: 'Чемпионат Италии',
+  france: 'Чемпионат Франции'
 });
 
 export const getTournamentTypeLabel = createMapFnStrict<TournamentType, string>({
@@ -28,7 +44,10 @@ export const getTournamentTypeAvailableTeamsCount = createArgumentMapFnStrict<
   ReadonlyArray<number>,
   number
 >({
-  league: (maxCount) => normalizeTeamsCount(leagueAvailableTeamsCount, maxCount),
-  group: (maxCount) => normalizeTeamsCount(groupAvailableTeamsCount, maxCount),
-  knockout: (maxCount) => normalizeTeamsCount(knockoutAvailableTeamsCount, maxCount)
+  league: (maxCount) => normalizeTeamsCount(LEAGUE_AVAILABLE_TEAMS_COUNT, maxCount),
+  group: (maxCount) => normalizeTeamsCount(GROUP_AVAILABLE_TEAMS_COUNT, maxCount),
+  knockout: (maxCount) => normalizeTeamsCount(KNOCKOUT_AVAILABLE_TEAMS_COUNT, maxCount)
 });
+
+export const isNationalCompetition = createUnionTypeGuard<NationalCompetition>(NATIONAL_COMPETITIONS);
+export const isCompetitionCountry = createUnionTypeGuard<ClubCompetition>(CLUB_COMPETITIONS);

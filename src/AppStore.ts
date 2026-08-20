@@ -1,14 +1,15 @@
 import { action, computed, IReactionDisposer, observable, reaction, runInAction } from 'mobx';
 
-import { tournamentTypes } from './constants/soccer.ts';
+import { TOURNAMENT_TYPES } from './constants/soccer.ts';
 import { StoreInterface } from './interfaces.ts';
-import { Competition, Team, TournamentType } from './types/soccer.ts';
+import { Team, TournamentType, Competition } from './types/soccer.ts';
 import { createContext } from './utils/context.ts';
 import { disposePersistableStore, makeStorePersistable } from './utils/persist/persist.ts';
 import { LocalPersistableStorage } from './utils/persist/storage.ts';
 import { createPersistableLiteralPropertySerializationOptions } from './utils/persist/utils.ts';
-import { getTournamentTypeAvailableTeamsCount } from './utils/soccer';
-import { getCompetitionTeams } from './utils/soccer/teams/countries.ts';
+import { getTournamentTypeAvailableTeamsCount, isNationalCompetition, isCompetitionCountry } from './utils/soccer';
+import { getClubTeams } from './utils/soccer/teams/clubs.ts';
+import { getNationalCompetitionTeams } from './utils/soccer/teams/national.ts';
 
 const DEFAULT_TOURNAMENT_TYPE: TournamentType = 'group';
 const DEFAULT_RENDER_LEAGUES_MATCH_DAYS: boolean = true;
@@ -44,7 +45,13 @@ export class AppStore implements StoreInterface {
   }
 
   @computed get teams(): Array<Team> {
-    return this.competition ? getCompetitionTeams(this.competition) : [];
+    if (isNationalCompetition(this.competition)) {
+      return getNationalCompetitionTeams(this.competition);
+    }
+    if (isCompetitionCountry(this.competition)) {
+      return getClubTeams(this.competition);
+    }
+    return [];
   }
 
   @computed get selectedTeams(): Array<Team> {
@@ -62,7 +69,7 @@ export class AppStore implements StoreInterface {
       properties: [
         {
           name: 'tournamentType',
-          ...createPersistableLiteralPropertySerializationOptions<AppStore, 'tournamentType'>(tournamentTypes)
+          ...createPersistableLiteralPropertySerializationOptions<AppStore, 'tournamentType'>(TOURNAMENT_TYPES)
         },
         'teamsCount',
         'competition',

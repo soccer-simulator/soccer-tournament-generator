@@ -1,6 +1,6 @@
 import { createMapFn } from 'map-fn';
 
-import { Competition, CountryRegion, CountryTeam, Team } from '../../../types/soccer.ts';
+import { NationalCompetition, Region, NationalTeam, Team } from '../../../types/soccer.ts';
 
 let teamId = 0;
 
@@ -8,12 +8,12 @@ function createTeam(team: Omit<Team, 'id'>): Team {
   return { id: ++teamId, ...team };
 }
 
-function createCountryTeam(team: Omit<Team, 'id'> & { region: CountryRegion }): CountryTeam {
+function createCountryTeam(team: Omit<Team, 'id'> & { region: Region }): NationalTeam {
   const { region, ...restTeam } = team;
   return { ...createTeam(restTeam), region };
 }
 
-const countries: Array<CountryTeam> = [
+const nationalTeams: Array<NationalTeam> = [
   createCountryTeam({ name: 'Аргентина', shortName: 'АРГ', region: 'southAmerica' }),
   createCountryTeam({ name: 'Франция', shortName: 'ФРА', region: 'europe' }),
   createCountryTeam({ name: 'Испания', shortName: 'ИСП', region: 'europe' }),
@@ -48,7 +48,12 @@ const countries: Array<CountryTeam> = [
   createCountryTeam({ name: 'Сербия', shortName: 'СЕР', region: 'europe' })
 ];
 
-export const getCompetitionTeams = createMapFn<Competition, Array<Team>>({
-  worldCup: countries,
-  euroCup: countries.filter((country) => country.region === 'europe')
+export const getNationalCompetitionTeams = createMapFn<NationalCompetition, Array<Team>>({
+  worldCup: nationalTeams,
+  euroCup: nationalTeams.filter((country) => country.region === 'europe'),
+  copaAmerica: nationalTeams.filter((country) => country.region === 'southAmerica'),
+  concacafCup: nationalTeams.filter((country) => country.region === 'northAmerica'),
+  africaNationsCup: nationalTeams.filter((country) => country.region === 'africa'),
+  asianCup: nationalTeams.filter((country) => country.region === 'asia'),
+  ofkNationsCup: nationalTeams.filter((country) => country.region === 'oceania')
 });

@@ -7,14 +7,14 @@ import { Field } from './components/bulma/Field/Field.tsx';
 import { Label } from './components/bulma/Label/Label.tsx';
 import { Select } from './components/bulma/Select/Select.tsx';
 import { SelectOption } from './components/bulma/Select/types.ts';
-import { competitions, tournamentTypes } from './constants/soccer.ts';
-import { Competition, TournamentType } from './types/soccer.ts';
+import { CLUB_COMPETITIONS, NATIONAL_COMPETITIONS, TOURNAMENT_TYPES } from './constants/soccer.ts';
+import { ClubCompetition, Competition, NationalCompetition, TournamentType } from './types/soccer.ts';
 import { useContext } from './utils/context.ts';
-import { getCompetitionLabel, getTournamentTypeLabel } from './utils/soccer';
+import { getClubCompetitionLabel, getNationalCompetitionLabel, getTournamentTypeLabel } from './utils/soccer';
 import { generateTournamentPdf } from './utils/soccer/tournament';
 import { defined } from './utils/type-guard.ts';
 
-const tournamentTypeOptions: ReadonlyArray<SelectOption<TournamentType>> = tournamentTypes.map(
+const tournamentTypeOptions: ReadonlyArray<SelectOption<TournamentType>> = TOURNAMENT_TYPES.map(
   (tournamentType): SelectOption<TournamentType> => {
     return { value: tournamentType, label: getTournamentTypeLabel(tournamentType) };
   }
@@ -22,8 +22,11 @@ const tournamentTypeOptions: ReadonlyArray<SelectOption<TournamentType>> = tourn
 
 const competitionOptions: ReadonlyArray<SelectOption<Competition | 'none'>> = [
   { value: 'none', label: 'Любое' },
-  ...competitions.map((competition): SelectOption<Competition | 'none'> => {
-    return { value: competition, label: getCompetitionLabel(competition) };
+  ...NATIONAL_COMPETITIONS.map((competition): SelectOption<NationalCompetition> => {
+    return { value: competition, label: getNationalCompetitionLabel(competition) };
+  }),
+  ...CLUB_COMPETITIONS.map((competition): SelectOption<ClubCompetition> => {
+    return { value: competition, label: getClubCompetitionLabel(competition) };
   })
 ];
 

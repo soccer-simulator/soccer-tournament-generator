@@ -1,22 +1,24 @@
-import { countryRegions, competitions, tournamentTypes } from '../constants/soccer.ts';
+import { CLUB_COMPETITIONS, REGIONS, NATIONAL_COMPETITIONS, TOURNAMENT_TYPES } from '../constants/soccer.ts';
 
 import { NamedEntity } from './index.ts';
 
-export type TournamentType = (typeof tournamentTypes)[number];
-export type CountryRegion = (typeof countryRegions)[number];
-export type Competition = (typeof competitions)[number];
+export type TournamentType = (typeof TOURNAMENT_TYPES)[number];
+export type Region = (typeof REGIONS)[number];
+export type NationalCompetition = (typeof NATIONAL_COMPETITIONS)[number];
+export type ClubCompetition = (typeof CLUB_COMPETITIONS)[number];
+export type Competition = NationalCompetition | ClubCompetition;
 
 export type Team = NamedEntity & {
   shortName: string;
   prefix?: string;
 };
 
-export type CountryTeam = Team & {
-  region: CountryRegion;
+export type NationalTeam = Team & {
+  region: Region;
 };
 
 export type ClubTeam = Team & {
-  country: string;
+  country: ClubCompetition;
 };
 
 export type Group = {
